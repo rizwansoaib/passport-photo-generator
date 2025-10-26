@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
+    <title>Passport Photo Editor</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+</head>
+<body>
+    <div class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+        <span class="theme-icon">🌙</span>
+    </div>
+    <div class="container">
+        <h1>Passport Photo Editor</h1>
+        
+        <!-- Header Info -->
+        <div class="app-header">
+            <div class="header-badges">
+                <span class="badge badge-primary">🔒 100% Offline</span>
+                <span class="badge badge-success">✨ Free Forever</span>
+                <span class="badge badge-info">🚀 No Sign-up Required</span>
+                <span class="badge badge-warning">🔓 Open Source</span>
+                <span class="badge badge-secure">🛡️ Privacy First</span>
+                <span class="badge badge-fast">⚡ Instant Processing</span>
+            </div>
+            <p class="header-description">
+                Professional photo editor with advanced tools • Crop, adjust & enhance • Works entirely offline
+            </p>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="editor-nav">
+            <a href="index.html" class="nav-link">← Simple Mode</a>
+            <span class="nav-title">Advanced Editor</span>
+        </div>
+
+        <div class="editor-grid">
+            <!-- Left Panel - Controls -->
+            <div class="editor-controls">
+                
+                <!-- Upload Section -->
+                <div class="card">
+                    <h3 class="card-title">📤 Upload Photo</h3>
+                    <input type="file" id="photoUpload" accept="image/*" />
+                </div>
+
+                <!-- Image Adjustments -->
+                <div class="card" id="adjustmentsCard" style="display: none;">
+                    <h3 class="card-title">🎨 Adjustments</h3>
+                    
+                    <div class="slider-group">
+                        <label>
+                            <span>Brightness</span>
+                            <span id="brightnessValue">0</span>
+                        </label>
+                        <input type="range" id="brightness" min="-100" max="100" value="0" />
+                    </div>
+
+                    <div class="slider-group">
+                        <label>
+                            <span>Contrast</span>
+                            <span id="contrastValue">100</span>
+                        </label>
+                        <input type="range" id="contrast" min="0" max="200" value="100" />
+                    </div>
+
+                    <div class="slider-group">
+                        <label>
+                            <span>Saturation</span>
+                            <span id="saturationValue">100</span>
+                        </label>
+                        <input type="range" id="saturation" min="0" max="200" value="100" />
+                    </div>
+
+                    <div class="slider-group">
+                        <label>
+                            <span>Exposure</span>
+                            <span id="exposureValue">0</span>
+                        </label>
+                        <input type="range" id="exposure" min="-100" max="100" value="0" />
+                    </div>
+
+                    <div class="slider-group">
+                        <label>
+                            <span>Sharpness</span>
+                            <span id="sharpnessValue">0</span>
+                        </label>
+                        <input type="range" id="sharpness" min="0" max="100" value="0" />
+                    </div>
+
+                    <div class="slider-group">
+                        <label>
+                            <span>Blur</span>
+                            <span id="blurValue">0</span>
+                        </label>
+                        <input type="range" id="blur" min="0" max="20" value="0" />
+                    </div>
+
+                    <div class="adjustment-buttons">
+                        <button id="autoEnhance" class="btn-secondary">✨ Auto Enhance</button>
+                        <button id="resetAdjustments" class="btn-outline">🔄 Reset All</button>
+                    </div>
+                </div>
+
+                <!-- Photo Size Selection (shows after Generate A4) -->
+                <div class="card" id="sizeSelectionCard" style="display: none;">
+                    <h3 class="card-title">📐 Photo Size</h3>
+                    
+                    <div class="size-options">
+                        <label>
+                            <input type="radio" name="photoSize" value="india" checked />
+                            <span>India/UK (35×45mm)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="photoSize" value="usa" />
+                            <span>USA (51×51mm)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="photoSize" value="canada" />
+                            <span>Canada (50×70mm)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="photoSize" value="schengen" />
+                            <span>Schengen (35×45mm)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="photoSize" value="china" />
+                            <span>China (33×48mm)</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="photoSize" value="custom" />
+                            <span>Custom Size</span>
+                        </label>
+                    </div>
+
+                    <div id="customSizeInputs" style="display: none; margin-top: 15px;">
+                        <div class="input-group">
+                            <label>Width (mm):</label>
+                            <input type="number" id="customWidth" min="20" max="100" value="35" />
+                        </div>
+                        <div class="input-group">
+                            <label>Height (mm):</label>
+                            <input type="number" id="customHeight" min="20" max="150" value="45" />
+                        </div>
+                    </div>
+
+                    <div class="photo-count-section">
+                        <h4 style="margin: 20px 0 10px 0; font-size: 15px; color: var(--text-primary);">Number of Photos</h4>
+                        <div class="slider-group">
+                            <label>
+                                <span>Photos on Sheet</span>
+                                <span id="photoCountValue">Maximum</span>
+                            </label>
+                            <input type="range" id="photoCountSlider" min="1" max="50" value="50" />
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+                            Slide to limit photos or keep at maximum to fill the sheet
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right Panel - Preview -->
+            <div class="editor-preview">
+                
+                <!-- Upload Zone -->
+                <div id="uploadZone" class="upload-zone">
+                    <div class="upload-content">
+                        <div class="upload-icon">📷</div>
+                        <h3>Upload Your Photo</h3>
+                        <p>Click to browse or drag & drop</p>
+                        <p class="upload-hint">Supports: JPG, PNG, WEBP (Max 10MB)</p>
+                    </div>
+                </div>
+
+                <!-- Crop Area -->
+                <div id="cropArea" class="crop-area" style="display: none;">
+                    <h3>Crop Your Photo</h3>
+                    <div class="crop-container">
+                        <img id="cropImage" alt="Crop preview" />
+                    </div>
+                    
+                    <!-- Crop Tools (Horizontal) -->
+                    <div class="crop-tools-horizontal" id="cropToolsCard" style="display: none;">
+                        <div class="tool-buttons-horizontal">
+                            <button id="rotateLeft" class="tool-btn">↺ Rotate Left</button>
+                            <button id="rotateRight" class="tool-btn">↻ Rotate Right</button>
+                            <button id="flipH" class="tool-btn">⇄ Flip H</button>
+                            <button id="flipV" class="tool-btn">⇅ Flip V</button>
+                            <button id="resetCrop" class="tool-btn">🔄 Reset</button>
+                        </div>
+                        <div class="crop-action-buttons">
+                            <button id="noCrop" class="btn-outline">⏭ Skip Crop</button>
+                            <button id="applyCrop" class="btn-apply">✓ Apply Crop</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Canvas -->
+                <div id="previewArea" class="preview-area" style="display: none;">
+                    <h3>Preview</h3>
+                    <canvas id="previewCanvas"></canvas>
+                    
+                    <div class="action-buttons">
+                        <button id="backToCrop" class="btn-outline">← Back to Crop</button>
+                        <button id="downloadSingle" class="btn-secondary">📥 Download Single</button>
+                        <button id="generateA4" class="btn-primary">📄 Generate A4</button>
+                    </div>
+                </div>
+
+                <!-- A4 Preview -->
+                <div id="a4Area" class="a4-area" style="display: none;">
+                    <h3>A4 Layout (300 DPI)</h3>
+                    <div class="a4-container">
+                        <canvas id="a4Canvas"></canvas>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="printA4" class="print-btn">
+                            <span class="print-icon">🖨️</span> Print
+                        </button>
+                        <button id="downloadPDF" class="btn-primary">📥 Download PDF</button>
+                        <button id="downloadJPG" class="btn-secondary">📥 Download JPG</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-item">
+                <span class="footer-icon">🔒</span>
+                <span>Works Offline • No Data Saved</span>
+            </div>
+            <div class="footer-item">
+                <span>Made with ❤️ in India</span>
+            </div>
+            <div class="footer-item">
+                <a href="https://github.com/rizwansoaib" target="_blank" rel="noopener noreferrer" class="footer-link">
+                    <span class="footer-icon">👨‍💻</span>
+                    <span>Developer: @rizwansoaib</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/editor.js"></script>
+</body>
+</html>
