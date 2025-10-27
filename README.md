@@ -1,176 +1,349 @@
-# 📸 Passport Photo Generator# Passport Photo Generator
+# 📸 Free Passport Photo Generator Online - Create Passport Photos Instantly# 📸 Passport Photo Generator# Passport Photo Generator
 
 
 
-<div align="center">This project is a simple web application that allows users to upload a photo, specify the number of passport-sized photos they want, and generate a PDF document containing those photos in A4 format. The application is built using HTML, CSS, and JavaScript, and does not require any backend services.
+<div align="center">
 
 
 
-![Passport Photo Generator](https://img.shields.io/badge/Version-2.0.0-purple?style=for-the-badge)## Project Structure
+![Passport Photo Generator](https://img.shields.io/badge/Version-2.0.0-purple?style=for-the-badge)<div align="center">This project is a simple web application that allows users to upload a photo, specify the number of passport-sized photos they want, and generate a PDF document containing those photos in A4 format. The application is built using HTML, CSS, and JavaScript, and does not require any backend services.
 
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
+![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
+
+![PWA Ready](https://img.shields.io/badge/PWA-Ready-blue?style=for-the-badge)
+
+![Passport Photo Generator](https://img.shields.io/badge/Version-2.0.0-purple?style=for-the-badge)## Project Structure
+
+**Create Professional Passport Photos for Free - No Sign-up, 100% Offline & Private! 🎨**
+
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+*The best free passport photo maker tool for India, USA, Canada, UK, Schengen, China and 200+ countries*
+
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)```
+
+[🚀 Try Now](#getting-started) • [📖 Features](#features) • [🎬 How to Use](#quick-start-guide) • [⭐ GitHub](https://github.com/rizwansoaib/passport-photo-generator)
 
 passport-photo-generator
 
+**Keywords:** passport photo maker, free passport photo generator, online passport photo tool, passport size photo editor, visa photo creator, ID photo maker, passport photo app, free photo editor, offline passport photo generator
+
 **Create professional passport photos instantly - 100% Free, Offline & Private! 🎨**├── index.html          # Main HTML document for the user interface
+
+</div>
 
 ├── css
 
+---
+
 [🚀 Live Demo](#) • [📖 Documentation](#features) • [🤝 Contributing](#contributing) • [⭐ Star Us](https://github.com/rizwansoaib)│   └── styles.css      # Styles for the application
+
+## 🔍 What is Passport Photo Generator?
 
 ├── js
 
+**Passport Photo Generator** is a **100% free, open-source web application** that lets you create professional passport-sized photos instantly without uploading to any server. Perfect for visa applications, government IDs, driver's licenses, and official documents.
+
 </div>│   ├── app.js          # Entry point for JavaScript functionality
+
+### Why Choose This Free Passport Photo Maker?
 
 │   ├── photoUpload.js   # Handles photo upload functionality
 
----│   ├── canvasRenderer.js # Renders the uploaded photo on the canvas
+✅ **Completely Free** - No hidden costs, subscriptions, or watermarks  
 
-│   └── pdfGenerator.js   # Generates and downloads the PDF document
+✅ **Works Offline** - Progressive Web App (PWA) with offline support  ---│   ├── canvasRenderer.js # Renders the uploaded photo on the canvas
 
-## 📖 The Story Behind This Project└── README.md           # Documentation for the project
+✅ **100% Private** - Your photos never leave your device  
 
-```
+✅ **No Sign-up Required** - Start creating photos immediately  │   └── pdfGenerator.js   # Generates and downloads the PDF document
 
-### 💭 The Motivation
+✅ **Professional Quality** - 300 DPI output for official documents  
 
-## Features
+✅ **Multiple Countries** - Support for India, USA, Canada, UK, Schengen, China, and custom sizes  ## 📖 The Story Behind This Project└── README.md           # Documentation for the project
 
-Have you ever needed passport photos urgently, only to find yourself:
+✅ **Advanced Editor** - Professional photo editing tools included  
 
-- 💸 Paying excessive fees at photo studios ($10-20 for a simple photo!)- Upload a photo from your device.
+✅ **Print & Download** - Generate PDF or JPG for printing  ```
 
-- ⏰ Wasting time traveling to and waiting at studios- Input the number of passport-sized photos to generate.
 
-- 🔐 Worrying about your personal photos being stored on someone else's server- Render the photos on a canvas in A4 passport size format.
 
-- 🌐 Struggling with expensive online tools that require subscriptions- Generate and download a PDF containing the rendered photos.
+---### 💭 The Motivation
 
-- 📱 Dealing with apps that collect your data
 
-## Usage
 
-**I faced these exact problems.** As a developer and someone who frequently needs passport photos for various applications, I was frustrated by the lack of a simple, free, and privacy-respecting solution.
+## ✨ Features - Why This is the Best Free Passport Photo Maker## Features
+
+
+
+### 🎯 Core FeaturesHave you ever needed passport photos urgently, only to find yourself:
+
+
+
+- **📤 Multiple Upload Options** - Upload JPG, PNG, WEBP images- 💸 Paying excessive fees at photo studios ($10-20 for a simple photo!)- Upload a photo from your device.
+
+- **✂️ Smart Cropping Tool** - Professional cropping or skip for original
+
+- **🎨 Advanced Photo Editing** - 6 professional adjustment tools- ⏰ Wasting time traveling to and waiting at studios- Input the number of passport-sized photos to generate.
+
+- **✨ Auto Enhance** - One-click professional enhancement
+
+- **📐 Country-Specific Sizes** - Pre-configured for:- 🔐 Worrying about your personal photos being stored on someone else's server- Render the photos on a canvas in A4 passport size format.
+
+  - 🇮🇳 India Passport (35×45mm)
+
+  - 🇬🇧 UK Passport (35×45mm)- 🌐 Struggling with expensive online tools that require subscriptions- Generate and download a PDF containing the rendered photos.
+
+  - 🇺🇸 USA Passport (51×51mm)
+
+  - 🇨🇦 Canada Passport (50×70mm)- 📱 Dealing with apps that collect your data
+
+  - 🇪🇺 Schengen Visa (35×45mm)
+
+  - 🇨🇳 China Visa (33×48mm)## Usage
+
+  - 🎯 Custom Size (20-150mm)
+
+- **📄 A4 Layout Generator** - Multiple photos at 300 DPI**I faced these exact problems.** As a developer and someone who frequently needs passport photos for various applications, I was frustrated by the lack of a simple, free, and privacy-respecting solution.
+
+- **📥 Export Options** - Print, PDF, or JPG download
 
 1. Open `index.html` in your web browser.
 
+### 🔒 Privacy & Security
+
 ### 💡 The Solution2. Use the file input to upload a photo.
 
-3. Enter the desired number of passport photos in the input field.
+- **100% Offline** - Works in browser after initial load
 
-That's when I decided: **Why not build it myself?**4. Click the "Generate PDF" button to create and download the PDF document.
+- **Zero Upload** - Photos never leave your device3. Enter the desired number of passport photos in the input field.
 
+- **No Tracking** - No analytics, cookies, or ads
 
-
-I created this tool with one mission: **Make passport photo creation accessible to everyone, everywhere, for free.**## Dependencies
-
-
-
-No servers. No sign-ups. No hidden costs. No data collection. Just pure, simple functionality that works entirely in your browser.This project uses the following libraries:
+- **Open Source** - Transparent code on GitHubThat's when I decided: **Why not build it myself?**4. Click the "Generate PDF" button to create and download the PDF document.
 
 
 
-### 🌍 Built in India with ❤️- [jsPDF](https://github.com/parallax/jsPDF) - A library for generating PDF documents in JavaScript.
+---
 
 
 
-This project represents the spirit of innovation and problem-solving. It's a small contribution to make life easier for millions of people worldwide who need passport photos but don't want to deal with the hassle and expense of traditional methods.## License
+## 🚀 Getting StartedI created this tool with one mission: **Make passport photo creation accessible to everyone, everywhere, for free.**## Dependencies
 
 
 
----This project is open-source and available under the MIT License.
+### Quick Start (3 Steps)
+
+
+
+1. **Upload** - Select your photo (JPG, PNG, WEBP)No servers. No sign-ups. No hidden costs. No data collection. Just pure, simple functionality that works entirely in your browser.This project uses the following libraries:
+
+2. **Edit** - Crop and adjust (or use Auto Enhance)
+
+3. **Download** - Print, save as PDF, or download JPG
+
+
+
+### Installation Options### 🌍 Built in India with ❤️- [jsPDF](https://github.com/parallax/jsPDF) - A library for generating PDF documents in JavaScript.
+
+
+
+```bash
+
+# Clone from GitHub
+
+git clone https://github.com/rizwansoaib/passport-photo-generator.gitThis project represents the spirit of innovation and problem-solving. It's a small contribution to make life easier for millions of people worldwide who need passport photos but don't want to deal with the hassle and expense of traditional methods.## License
+
+cd passport-photo-generator
+
+open index.html
+
+
+
+# Or use as PWA - Install from browser---This project is open-source and available under the MIT License.
+
+```
 
 ## ✨ Features
 
+---
+
 ### 🎯 Core Features
 
+## 🎯 Supported Countries & Sizes
+
 - **📤 Upload & Process** - Support for JPG, PNG, and WEBP formats
-- **✂️ Smart Cropping** - Professional cropping with Cropper.js or skip for original size
-- **🎨 Advanced Adjustments** - 6 professional editing tools:
-  - ☀️ Brightness (-100 to +100)
-  - 🔲 Contrast (0-200%)
-  - 🌈 Saturation (0-200%)
-  - 💡 Exposure (-100 to +100)
-  - ⚡ Sharpness (0-100)
-  - 🌫️ Blur (0-20px)
+
+| Country | Size | Use For |- **✂️ Smart Cropping** - Professional cropping with Cropper.js or skip for original size
+
+|---------|------|---------|- **🎨 Advanced Adjustments** - 6 professional editing tools:
+
+| 🇮🇳 India | 35×45mm | Passport, Visa, Aadhaar |  - ☀️ Brightness (-100 to +100)
+
+| 🇺🇸 USA | 51×51mm | Passport, Visa, Green Card |  - 🔲 Contrast (0-200%)
+
+| 🇨🇦 Canada | 50×70mm | Passport, PR Card |  - 🌈 Saturation (0-200%)
+
+| 🇬🇧 UK | 35×45mm | Passport, Visa |  - 💡 Exposure (-100 to +100)
+
+| 🇪🇺 Schengen | 35×45mm | European Visa |  - ⚡ Sharpness (0-100)
+
+| 🇨🇳 China | 33×48mm | Chinese Visa |  - 🌫️ Blur (0-20px)
+
 - **✨ Auto Enhance** - One-click photo enhancement
-- **📐 Multiple Sizes** - Pre-configured for different countries:
+
+---- **📐 Multiple Sizes** - Pre-configured for different countries:
+
   - 🇮🇳 India/UK (35×45mm)
-  - 🇺🇸 USA (51×51mm)
+
+## 🛠️ Technology Stack  - 🇺🇸 USA (51×51mm)
+
   - 🇨🇦 Canada (50×70mm)
-  - 🇪🇺 Schengen (35×45mm)
-  - 🇨🇳 China (33×48mm)
-  - 🎯 Custom size (20-100mm width, 20-150mm height)
-- **📄 A4 Layout** - Automatically arranges photos on A4 sheet at 300 DPI
-- **🔢 Photo Count** - Choose 1 to maximum photos that fit
+
+- **HTML5/CSS3/JavaScript** - Pure web technologies  - 🇪🇺 Schengen (35×45mm)
+
+- **Cropper.js** - Professional image cropping  - 🇨🇳 China (33×48mm)
+
+- **jsPDF** - Client-side PDF generation  - 🎯 Custom size (20-100mm width, 20-150mm height)
+
+- **Canvas API** - 300 DPI image processing- **📄 A4 Layout** - Automatically arranges photos on A4 sheet at 300 DPI
+
+- **Service Worker** - Offline functionality- **🔢 Photo Count** - Choose 1 to maximum photos that fit
+
 - **📥 Multiple Export Options**:
-  - 🖨️ Direct print
+
+---  - 🖨️ Direct print
+
   - 📄 PDF download
-  - 🖼️ JPG download (single or A4 sheet)
 
-### 🔒 Privacy & Security
+## 📊 Why Choose This Tool?  - 🖼️ JPG download (single or A4 sheet)
 
-- **100% Offline** - Works entirely in your browser after initial load
-- **Zero Server Upload** - Your photos never leave your device
-- **No Data Collection** - No tracking, no analytics, no cookies
-- **No Sign-up Required** - Instant access without registration
+
+
+| Feature | This Tool | Studios | Online Tools |### 🔒 Privacy & Security
+
+|---------|-----------|---------|--------------|
+
+| Cost | 🟢 Free | 🔴 $10-20 | 🟡 $5-10 |- **100% Offline** - Works entirely in your browser after initial load
+
+| Privacy | 🟢 Offline | 🔴 Stored | 🔴 Uploaded |- **Zero Server Upload** - Your photos never leave your device
+
+| Speed | 🟢 Instant | 🔴 30-60 min | 🟡 5-10 min |- **No Data Collection** - No tracking, no analytics, no cookies
+
+| Quality | 🟢 300 DPI | 🟢 Pro | 🟡 Varies |- **No Sign-up Required** - Instant access without registration
+
 - **Open Source** - Transparent code you can audit
-- **Privacy First** - Your data belongs to you, always
 
-### 🚀 Technical Features
+**Savings**: Save $150+/year compared to photo studios!- **Privacy First** - Your data belongs to you, always
 
-- **⚡ Instant Processing** - Real-time preview and adjustments
+
+
+---### 🚀 Technical Features
+
+
+
+## 🤝 Contributing- **⚡ Instant Processing** - Real-time preview and adjustments
+
 - **🌓 Dark Mode** - Eye-friendly dark theme with toggle
-- **📱 Responsive Design** - Works perfectly on mobile, tablet, and desktop
+
+Contributions welcome! Please read our [Contributing Guide](#contributing).- **📱 Responsive Design** - Works perfectly on mobile, tablet, and desktop
+
 - **🔄 Progressive Web App** - Install on any device like a native app
-- **💾 Service Worker** - Works offline after first visit
-- **🎯 High Quality** - 300 DPI output for professional results
-- **🎨 Modern UI** - Beautiful gradient-based design with smooth animations
+
+- 🐛 Report bugs- **💾 Service Worker** - Works offline after first visit
+
+- 💡 Suggest features  - **🎯 High Quality** - 300 DPI output for professional results
+
+- 📝 Improve docs- **🎨 Modern UI** - Beautiful gradient-based design with smooth animations
+
+- 💻 Submit PRs
+
+---
 
 ---
 
 ## 🎭 Two Modes for Every Need
 
+## 📄 License
+
 ### 🏃 Simple Mode (index.html)
-Perfect for quick passport photo generation:
+
+MIT License - Free to use, modify, and distribute!Perfect for quick passport photo generation:
+
 1. Upload your photo
-2. Select photo size (country preset or custom)
+
+---2. Select photo size (country preset or custom)
+
 3. Generate PDF or Print immediately
+
+## 👨‍💻 Developer
 
 **Best for:** Speed and simplicity when you just need basic passport photos.
 
+<div align="center">
+
 ### 🎨 Advanced Editor (editor.html)
-Professional photo editing with full control:
+
+**Made with ❤️ in India by [Rizwan Soaib](https://github.com/rizwansoaib)**Professional photo editing with full control:
+
 1. Upload your photo
-2. Crop with precision tools (or skip)
-3. Apply 6 professional adjustments
+
+[![GitHub](https://img.shields.io/badge/GitHub-rizwansoaib-181717?style=for-the-badge&logo=github)](https://github.com/rizwansoaib)2. Crop with precision tools (or skip)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/rizwansoaib)3. Apply 6 professional adjustments
+
 4. Use Auto Enhance for instant improvements
-5. Select photo size and quantity
+
+### ⭐ Star this repo if it helped you!5. Select photo size and quantity
+
 6. Generate A4 layout with live preview
+
+</div>
 
 **Best for:** Professional results with fine-tuned control over every aspect.
 
 ---
 
+---
+
+## 🔗 Quick Links
+
 ## 🚀 Getting Started
 
-### 📦 Installation
+- [📖 Full Documentation](#features)
 
-**Option 1: Clone Repository**
+- [🐛 Report Issues](https://github.com/rizwansoaib/passport-photo-generator/issues)### 📦 Installation
+
+- [💡 Request Features](https://github.com/rizwansoaib/passport-photo-generator/discussions)
+
+- [⭐ Star on GitHub](https://github.com/rizwansoaib/passport-photo-generator)**Option 1: Clone Repository**
+
 ```bash
-# Clone the repository
+
+---# Clone the repository
+
 git clone https://github.com/rizwansoaib/passport-photo-generator.git
 
+<div align="center">
+
 # Navigate to project directory
-cd passport-photo-generator
 
-# Open in browser (no build required!)
+**© 2025 Rizwan Soaib • MIT License**cd passport-photo-generator
+
+
+
+*Built in India 🇮🇳 • Used Worldwide 🌍 • Free Forever 💯*# Open in browser (no build required!)
+
 open index.html
-```
 
-**Option 2: Download ZIP**
+**#FreePassportPhoto #OpenSource #PrivacyFirst #MadeInIndia**```
+
+
+
+</div>**Option 2: Download ZIP**
+
 1. Download the ZIP file from GitHub
 2. Extract to your desired location
 3. Open `index.html` in any modern browser
