@@ -9,11 +9,18 @@ const CACHE_NAME = 'passport-photo-v2';
 const urlsToCache = [
   './',
   './index.html',
+  './editor.html',
   './css/styles.css',
   './js/app.js',
+  './js/editor.js',
+  './js/photoUpload.js',
+  './js/canvasRenderer.js',
+  './js/pdfGenerator.js',
   './manifest.json',
   // CDN resources will be cached on first load
-  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css'
 ];
 
 // Install event - cache resources

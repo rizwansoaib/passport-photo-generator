@@ -1,10 +1,10 @@
 {
-  "name": "Passport Photo Generator",
+  "name": "Free Passport Photo Generator",
   "short_name": "PassportPic",
   "version": "2.0.0",
-  "manifest_version": 1,
-  "description": "Create professional passport photos offline - 100% privacy",
+  "description": "Create professional passport photos FREE! Works 100% offline, no sign-up. Support for USA, India, UK, Canada & 50+ countries.",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#667eea",
@@ -22,7 +22,11 @@
       "type": "image/svg+xml"
     }
   ],
-  "categories": ["photo", "productivity", "utilities"],
+  "categories": ["photo", "photography", "productivity", "utilities", "tools"],
   "screenshots": [],
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "related_applications": [],
+  "lang": "en",
+  "dir": "ltr"
 }

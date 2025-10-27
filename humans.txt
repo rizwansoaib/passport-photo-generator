@@ -1,0 +1,57 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Developer & Designer: Rizwan Soaib
+    Contact: rizwansoaib [at] github.com
+    Twitter: @rizwansoaib
+    GitHub: https://github.com/rizwansoaib
+    Location: India
+
+# THANKS
+
+    Open Source Community
+    Cropper.js Contributors
+    jsPDF Team
+    All Users & Contributors
+
+# TECHNOLOGY COLOPHON
+
+    Standards: HTML5, CSS3, JavaScript ES6+
+    Components: Vanilla JavaScript, Canvas API
+    Libraries: Cropper.js 1.6.1, jsPDF 2.5.1
+    PWA: Service Worker, Web App Manifest
+    Fonts: System Fonts (-apple-system, BlinkMacSystemFont, Segoe UI)
+    Tools: Git, VS Code
+    Hosting: GitHub Pages
+
+# PROJECT INFO
+
+    Name: Passport Photo Generator
+    Version: 2.0.0
+    Type: Progressive Web App (PWA)
+    License: MIT
+    Year: 2025
+    Status: Active Development
+    
+# FEATURES
+
+    - 100% Free Forever
+    - Works Completely Offline
+    - No Sign-up Required
+    - Privacy-First Approach
+    - 300 DPI Professional Quality
+    - Support for 50+ Countries
+    - Dark Mode Support
+    - Mobile Responsive
+    - Installable PWA
+    
+# PHILOSOPHY
+
+    We believe everyone deserves access to free, 
+    privacy-respecting tools. Your photos stay on 
+    your device, always. No tracking, no data 
+    collection, no hidden costs.
+
+    Made with ❤️ in India for the world.

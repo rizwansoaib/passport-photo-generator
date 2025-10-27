@@ -1,6 +1,62 @@
 (function() {
     'use strict';
 
+    // Loading Animation
+    const appLoader = document.getElementById('appLoader');
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            appLoader.classList.add('hidden');
+        }, 1000);
+    });
+
+    // PWA Install Prompt
+    let deferredPrompt;
+    const installPrompt = document.getElementById('installPrompt');
+    const installButton = document.getElementById('installButton');
+    const installLater = document.getElementById('installLater');
+    const installClose = document.getElementById('installClose');
+
+    // Capture the beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Don't show if already dismissed
+        if (!localStorage.getItem('installPromptDismissed')) {
+            setTimeout(() => {
+                installPrompt.classList.add('show');
+            }, 3000); // Show after 3 seconds
+        }
+    });
+
+    // Install button click
+    installButton.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`Install prompt outcome: ${outcome}`);
+        
+        deferredPrompt = null;
+        installPrompt.classList.remove('show');
+    });
+
+    // Later button click
+    installLater.addEventListener('click', () => {
+        installPrompt.classList.remove('show');
+        localStorage.setItem('installPromptDismissed', 'true');
+        // Clear after 7 days
+        setTimeout(() => {
+            localStorage.removeItem('installPromptDismissed');
+        }, 7 * 24 * 60 * 60 * 1000);
+    });
+
+    // Close button click
+    installClose.addEventListener('click', () => {
+        installPrompt.classList.remove('show');
+        localStorage.setItem('installPromptDismissed', 'true');
+    });
+
     // Constants
     const A4_WIDTH = 2480;
     const A4_HEIGHT = 3508;
@@ -602,5 +658,18 @@
             URL.revokeObjectURL(url);
         }, 'image/jpeg', 1.0);
     });
+
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./service-worker.js')
+                .then(registration => {
+                    console.log('✅ Service Worker registered successfully:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('❌ Service Worker registration failed:', error);
+                });
+        });
+    }
 
 })();

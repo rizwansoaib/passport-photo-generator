@@ -4,12 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#667eea">
-    <title>Passport Photo Editor</title>
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>Advanced Passport Photo Editor - Professional Photo Editing Tools | Free Online Editor</title>
+    <meta name="title" content="Advanced Passport Photo Editor - Professional Photo Editing Tools | Free Online Editor">
+    <meta name="description" content="Professional passport photo editor with advanced tools. Crop, adjust brightness, contrast, saturation & more. Free forever, works offline. Create perfect passport photos for USA, India, UK, Canada & 50+ countries.">
+    <meta name="keywords" content="passport photo editor, photo editor online free, crop passport photo, adjust passport photo, professional photo editor, passport photo crop tool, brightness adjustment, contrast tool, saturation editor, photo enhancement, visa photo editor, id photo editor">
+    <meta name="author" content="Rizwan Soaib">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rizwansoaib.github.io/passport-photo-generator/editor.html">
+    <meta property="og:title" content="Advanced Passport Photo Editor - Professional Editing Tools">
+    <meta property="og:description" content="Edit passport photos like a pro! Crop, adjust, enhance with 6 professional tools. Free, offline, privacy-first photo editor.">
+    <meta property="og:image" content="https://rizwansoaib.github.io/passport-photo-generator/og-image-editor.jpg">
+    <meta property="og:site_name" content="Passport Photo Generator">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://rizwansoaib.github.io/passport-photo-generator/editor.html">
+    <meta name="twitter:title" content="Advanced Passport Photo Editor - Free Professional Tools">
+    <meta name="twitter:description" content="Professional passport photo editor with crop, brightness, contrast, saturation & more. Free forever!">
+    <meta name="twitter:image" content="https://rizwansoaib.github.io/passport-photo-generator/twitter-image-editor.jpg">
+    <meta name="twitter:creator" content="@rizwansoaib">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://rizwansoaib.github.io/passport-photo-generator/editor.html">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23667eea;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23764ba2;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23grad)'/%3E%3Ctext x='50' y='50' dominant-baseline='middle' text-anchor='middle' font-size='55' fill='white'%3E📸%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23667eea;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23764ba2;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23grad)'/%3E%3Ctext x='90' y='90' dominant-baseline='middle' text-anchor='middle' font-size='90' fill='white'%3E📸%3C/text%3E%3C/svg%3E">
+    
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Advanced Passport Photo Editor",
+      "applicationCategory": "PhotographyApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Professional Crop Tool",
+        "Brightness Adjustment",
+        "Contrast Control",
+        "Saturation Editor",
+        "Exposure Control",
+        "Sharpness Tool",
+        "Blur Effect",
+        "Auto Enhance",
+        "Live Preview",
+        "300 DPI Export"
+      ]
+    }
+    </script>
+    
+    <!-- Humans.txt -->
+    <link type="text/plain" rel="author" href="humans.txt">
 </head>
 <body>
+    <!-- Loading Animation -->
+    <div class="app-loader" id="appLoader">
+        <div class="loader-content">
+            <div class="loader-icon">📸</div>
+            <h2 class="loader-title">Advanced Photo Editor</h2>
+            <p class="loader-subtitle">Loading professional editing tools...</p>
+            <div class="loader-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Install Prompt -->
+    <div class="install-prompt" id="installPrompt">
+        <button class="install-close" id="installClose">×</button>
+        <div class="install-prompt-content">
+            <div class="install-icon">📱</div>
+            <div class="install-text">
+                <div class="install-title">Install App</div>
+                <div class="install-description">Add to home screen for quick access & offline use!</div>
+            </div>
+        </div>
+        <div class="install-actions">
+            <button class="install-btn install-btn-primary" id="installButton">Install Now</button>
+            <button class="install-btn install-btn-secondary" id="installLater">Maybe Later</button>
+        </div>
+    </div>
+
     <div class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
         <span class="theme-icon">🌙</span>
     </div>
