@@ -215,6 +215,7 @@ select, input[type="number"] {
     background: var(--input-bg);
     font-family: inherit;
     color: var(--text-primary);
+    box-sizing: border-box;
 }
 
 select:hover, input[type="number"]:hover {
@@ -228,6 +229,7 @@ select:focus, input[type="number"]:focus {
 }
 
 input[type="file"] {
+    width: 100%;
     padding: 20px;
     border: 3px dashed var(--accent-color);
     border-radius: 16px;
@@ -237,6 +239,7 @@ input[type="file"] {
     text-align: center;
     font-size: 15px;
     color: var(--text-primary);
+    box-sizing: border-box;
 }
 
 input[type="file"]:hover {
@@ -254,6 +257,7 @@ input[type="file"]:hover {
     border-radius: 12px;
     border: 1px solid rgba(102, 126, 234, 0.2);
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
 button {
@@ -269,6 +273,7 @@ button {
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     position: relative;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 button::before {
@@ -509,6 +514,16 @@ button:disabled {
     
     #customSizeInputs {
         grid-template-columns: 1fr;
+        padding: 15px;
+        gap: 12px;
+    }
+    
+    select, input[type="number"], input[type="file"] {
+        font-size: 14px;
+    }
+    
+    label {
+        font-size: 14px;
     }
     
     .image-item {
@@ -532,6 +547,44 @@ button:disabled {
     
     .remove-btn {
         flex: 1;
+    }
+    
+    /* Editor specific mobile fixes */
+    .card {
+        padding: 15px;
+    }
+    
+    .size-options label {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .input-group input[type="number"] {
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .slider-group {
+        margin-bottom: 15px;
+    }
+    
+    .slider-group label {
+        font-size: 13px;
+    }
+    
+    .editor-preview {
+        padding: 20px;
+    }
+    
+    .adjustment-buttons,
+    .crop-action-buttons {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    button {
+        padding: 12px 20px;
+        font-size: 14px;
     }
 }
 
@@ -606,6 +659,7 @@ button:disabled {
     min-height: 600px;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
 }
 
 .card {
@@ -614,6 +668,7 @@ button:disabled {
     padding: 20px;
     box-shadow: 0 2px 8px var(--shadow-color);
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
 .card:hover {
@@ -759,12 +814,14 @@ button:disabled {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-top: 20px;
+    box-sizing: border-box;
 }
 
 .crop-action-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    box-sizing: border-box;
 }
 
 .crop-action-buttons .btn-outline,
@@ -789,6 +846,7 @@ button:disabled {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
 .size-options label:hover {
@@ -832,6 +890,7 @@ button:disabled {
     background: var(--input-bg);
     color: var(--text-primary);
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
 .input-group input[type="number"]:focus {
