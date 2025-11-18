@@ -15,6 +15,7 @@ Best free passport photo maker for India, USA, Canada, UK, Schengen, China and 2
 - **100% Free** - No costs, subscriptions, or watermarks
 - **100% Private** - Photos never leave your device
 - **Works Offline** - PWA with complete offline support
+- **Desktop Apps** - Native apps for Mac, Windows, and Linux
 - **No Sign-up Required** - Start instantly
 - **300 DPI Quality** - Professional print-ready output
 - **200+ Countries** - All passport photo sizes supported
@@ -47,7 +48,7 @@ Best free passport photo maker for India, USA, Canada, UK, Schengen, China and 2
 
 ## 🚀 Quick Start
 
-### Installation
+### Web Version
 
 ```bash
 # Clone the repository
@@ -58,6 +59,38 @@ cd passport-photo-generator
 
 # Open in browser
 open index.html
+```
+
+### Desktop App
+
+**Download Pre-built Apps:**
+
+Download the latest desktop app for your platform from the [Releases](https://github.com/rizwansoaib/passport-photo-generator/releases) page:
+
+- **macOS**: `.dmg` or `.zip` (supports both Intel and Apple Silicon)
+- **Windows**: `.exe` installer or portable `.exe`
+- **Linux**: `.AppImage`, `.deb`, or `.snap`
+
+**Build from Source:**
+
+```bash
+# Clone the repository
+git clone https://github.com/rizwansoaib/passport-photo-generator.git
+
+# Navigate to directory
+cd passport-photo-generator
+
+# Install dependencies
+npm install
+
+# Run the app
+npm start
+
+# Build for your platform
+npm run dist
+
+# Or build for all platforms
+npm run dist:all
 ```
 
 ### Usage
@@ -86,9 +119,15 @@ passport-photo-generator/
 ├── editor.html             # Advanced editor
 ├── manifest.json           # PWA config
 ├── service-worker.js       # Offline support
+├── main.js                 # Electron main process
+├── preload.js              # Electron preload script
+├── package.json            # Node.js dependencies and build config
 ├── robots.txt              # SEO
 ├── sitemap.xml             # Sitemap
 ├── humans.txt              # Credits
+├── assets/
+│   ├── icon.svg           # App icon (SVG)
+│   └── icon.png           # App icon (PNG)
 ├── css/
 │   └── styles.css         # Main styles (1500+ lines)
 └── js/
@@ -107,12 +146,16 @@ passport-photo-generator/
 |----------|-------------|
 | **Frontend** | HTML5, CSS3, Vanilla JavaScript (ES6+) |
 | **Libraries** | Cropper.js v1.6.1, jsPDF v2.5.1 |
+| **Desktop** | Electron (cross-platform desktop apps) |
+| **Build Tools** | electron-builder (multi-platform packaging) |
 | **Web APIs** | Canvas API, File API, Service Worker |
 | **Features** | PWA, Offline Support, Responsive Design |
 
 ---
 
-## 📱 Browser Support
+## 📱 Platform Support
+
+### Web Browsers
 
 | Browser | Version | PWA Support |
 |---------|---------|-------------|
@@ -121,6 +164,14 @@ passport-photo-generator/
 | Safari | 13+ | ✅ Yes |
 | Edge | 80+ | ✅ Yes |
 | Opera | 67+ | ✅ Yes |
+
+### Desktop Apps
+
+| Platform | Architectures | Formats |
+|----------|--------------|---------|
+| **macOS** | Intel (x64), Apple Silicon (arm64) | DMG, ZIP |
+| **Windows** | 32-bit (ia32), 64-bit (x64) | NSIS Installer, Portable EXE |
+| **Linux** | 64-bit (x64) | AppImage, DEB, Snap |
 
 **Devices:** Windows, macOS, Linux, iOS 13+, Android 8+
 
@@ -187,6 +238,12 @@ git push origin feature/amazing-feature
 ---
 
 ## 🗺️ Roadmap
+
+### Version 2.0 (Completed)
+
+- [x] Desktop apps for Mac, Windows, and Linux
+- [x] Electron-based cross-platform support
+- [x] Native application experience
 
 ### Version 2.1 (Planned)
 
