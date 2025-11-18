@@ -1,0 +1,111 @@
+{
+  "name": "passport-photo-generator",
+  "productName": "Passport Photo Generator",
+  "version": "2.0.0",
+  "description": "Create professional passport photos instantly - 100% free, offline, and private! Desktop app for Mac, Windows, and Linux.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron . --no-sandbox",
+    "dev": "NODE_ENV=development electron . --no-sandbox",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux",
+    "dist:all": "electron-builder --mac --win --linux"
+  },
+  "keywords": [
+    "passport",
+    "photo",
+    "generator",
+    "visa",
+    "id",
+    "photo editor",
+    "offline",
+    "desktop app",
+    "electron"
+  ],
+  "author": {
+    "name": "Rizwan Soaib",
+    "email": "rizwansoaib@example.com",
+    "url": "https://github.com/rizwansoaib"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rizwansoaib/passport-photo-generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rizwansoaib/passport-photo-generator.git"
+  },
+  "build": {
+    "appId": "com.rizwansoaib.passportphoto",
+    "productName": "Passport Photo Generator",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "editor.html",
+      "manifest.json",
+      "css/**/*",
+      "js/**/*",
+      "assets/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.photography",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "icon": "assets/icon.icns"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64", "ia32"]
+        }
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        },
+        {
+          "target": "snap",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Graphics",
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^39.2.1",
+    "electron-builder": "^26.0.12"
+  }
+}
