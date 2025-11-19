@@ -52,6 +52,13 @@
       "js/**/*",
       "assets/**/*"
     ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "rizwansoaib",
+        "repo": "passport-photo-generator"
+      }
+    ],
     "mac": {
       "category": "public.app-category.photography",
       "target": [

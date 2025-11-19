@@ -5,6 +5,12 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create a draft release'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -43,6 +49,24 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Generate checksums
+        shell: bash
+        run: |
+          cd dist
+          if [ "${{ matrix.platform }}" = "win" ]; then
+            for file in *.exe; do
+              [ -f "$file" ] && sha256sum "$file" > "$file.sha256"
+            done
+          elif [ "${{ matrix.platform }}" = "mac" ]; then
+            for file in *.dmg *.zip; do
+              [ -f "$file" ] && shasum -a 256 "$file" > "$file.sha256"
+            done
+          else
+            for file in *.AppImage *.deb *.snap; do
+              [ -f "$file" ] && sha256sum "$file" > "$file.sha256"
+            done
+          fi
+      
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -54,12 +78,15 @@ jobs:
             dist/*.AppImage
             dist/*.deb
             dist/*.snap
+            dist/*.sha256
+            dist/latest*.yml
           retention-days: 7
       
       - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.create_release == 'true'
         with:
+          draft: ${{ github.event.inputs.create_release == 'true' }}
           files: |
             dist/*.exe
             dist/*.dmg
@@ -67,5 +94,7 @@ jobs:
             dist/*.AppImage
             dist/*.deb
             dist/*.snap
+            dist/*.sha256
+            dist/latest*.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
