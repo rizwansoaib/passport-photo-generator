@@ -194,6 +194,11 @@ Build configuration is in `package.json` under the `build` key:
     "directories": {
       "output": "dist"
     },
+    "publish": {
+      "provider": "github",
+      "owner": "rizwansoaib",
+      "repo": "passport-photo-generator"
+    },
     ...
   }
 }
@@ -204,48 +209,59 @@ To customize:
 - Modify `productName` to change the app display name
 - Update `icon` paths to use custom icons
 - Add/remove platforms or architectures from targets
+- Configure `publish` for auto-update support
+
+## Auto-Updates
+
+The app supports automatic updates through electron-builder's auto-updater:
+
+1. Updates are checked against GitHub Releases
+2. `latest*.yml` files are generated during build
+3. Configure the `publish` section in package.json
+4. Users will be notified when new versions are available
 
 ## CI/CD Integration
 
-You can integrate building into your CI/CD pipeline:
+This repository includes a GitHub Actions workflow that automatically builds and releases desktop apps.
 
-### GitHub Actions Example
+### Automated Releases
 
-```yaml
-name: Build Desktop Apps
+The workflow (`.github/workflows/build-desktop.yml`) automatically:
 
-on:
-  push:
-    tags:
-      - 'v*'
+1. **Builds for all platforms** when you push a version tag
+2. **Generates checksums** (SHA256) for all artifacts
+3. **Creates auto-update metadata** files
+4. **Publishes to GitHub Releases** with all artifacts
 
-jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-    
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      
-      - run: npm install
-      - run: npm run dist
-      
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.os }}-build
-          path: dist/*
+### Triggering a Build
+
+**Automatic (on tag push):**
+```bash
+git tag v2.1.0
+git push origin v2.1.0
 ```
+
+**Manual (via GitHub UI):**
+1. Go to Actions tab
+2. Select "Build Desktop Apps"
+3. Click "Run workflow"
+4. Choose branch and options
+
+### What Gets Built
+
+Each platform build generates:
+- **macOS**: DMG, ZIP (Intel & Apple Silicon) + checksums + latest-mac.yml
+- **Windows**: NSIS EXE, Portable EXE (32/64-bit) + checksums
+- **Linux**: AppImage, DEB, Snap + checksums + latest-linux.yml
+
+For more details, see [.github/RELEASE.md](.github/RELEASE.md)
 
 ## Resources
 
 - [electron-builder Documentation](https://www.electron.build/)
 - [Electron Documentation](https://www.electronjs.org/docs)
 - [Code Signing Guide](https://www.electron.build/code-signing)
+- [Release Guide](.github/RELEASE.md)
 
 ## License
 

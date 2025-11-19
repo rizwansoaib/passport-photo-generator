@@ -8,11 +8,11 @@
     "start": "electron . --no-sandbox",
     "dev": "NODE_ENV=development electron . --no-sandbox",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "dist:mac": "electron-builder --mac",
-    "dist:win": "electron-builder --win",
-    "dist:linux": "electron-builder --linux",
-    "dist:all": "electron-builder --mac --win --linux"
+    "dist": "electron-builder --publish never",
+    "dist:mac": "electron-builder --mac --publish never",
+    "dist:win": "electron-builder --win --publish never",
+    "dist:linux": "electron-builder --linux --publish never",
+    "dist:all": "electron-builder --mac --win --linux --publish never"
   },
   "keywords": [
     "passport",
@@ -52,13 +52,11 @@
       "js/**/*",
       "assets/**/*"
     ],
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "rizwansoaib",
-        "repo": "passport-photo-generator"
-      }
-    ],
+    "publish": {
+      "provider": "github",
+      "owner": "rizwansoaib",
+      "repo": "passport-photo-generator"
+    },
     "mac": {
       "category": "public.app-category.photography",
       "target": [
