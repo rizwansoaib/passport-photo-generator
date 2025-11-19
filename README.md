@@ -68,8 +68,10 @@ open index.html
 Download the latest desktop app for your platform from the [Releases](https://github.com/rizwansoaib/passport-photo-generator/releases) page:
 
 - **macOS**: `.dmg` or `.zip` (supports both Intel and Apple Silicon)
-- **Windows**: `.exe` installer or portable `.exe`
+- **Windows**: `.exe` installer or portable `.exe` (32-bit and 64-bit)
 - **Linux**: `.AppImage`, `.deb`, or `.snap`
+
+All releases include SHA256 checksums for security verification.
 
 **Build from Source:**
 
@@ -92,6 +94,8 @@ npm run dist
 # Or build for all platforms
 npm run dist:all
 ```
+
+For detailed build instructions and release process, see [BUILD.md](BUILD.md) and [.github/RELEASE.md](.github/RELEASE.md).
 
 ### Usage
 
