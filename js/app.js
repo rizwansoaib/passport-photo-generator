@@ -181,7 +181,12 @@
     function handleImageUpload(event) {
         const file = event.target.files[0];
         if (!file) return;
+        addImageFile(file);
+        // Reset file input to allow same file upload again
+        photoUpload.value = '';
+    }
 
+    function addImageFile(file, autoCropRect) {
         const reader = new FileReader();
         reader.onload = function(e) {
             const img = new Image();
@@ -196,13 +201,31 @@
                 renderPreview();
                 updateImageList();
                 generateBtn.disabled = false;
-                
-                // Reset file input to allow same file upload again
-                photoUpload.value = '';
             };
             img.src = e.target.result;
         };
         reader.readAsDataURL(file);
+        void autoCropRect; // Simple mode shows the full image (no crop step); reserved for future use.
+    }
+
+    // Live Camera Studio launcher
+    const openCameraBtn = document.getElementById('openCameraBtn');
+    if (openCameraBtn) {
+        openCameraBtn.addEventListener('click', () => {
+            if (!window.PPGCameraStudio) {
+                alert('Live Camera Studio failed to load. Please check your connection and reload the page.');
+                return;
+            }
+            window.PPGCameraStudio.open({
+                preset: {
+                    widthMM: (PHOTO_WIDTH / DPI) * MM_TO_INCH,
+                    heightMM: (PHOTO_HEIGHT / DPI) * MM_TO_INCH
+                },
+                onCapture: (file, autoCropRect) => {
+                    addImageFile(file, autoCropRect);
+                }
+            });
+        });
     }
 
     function updateImageList() {

@@ -165,20 +165,45 @@
         }
     }
 
-    function loadImage(file) {
+    // Live Camera Studio launcher
+    const openCameraBtn = document.getElementById('openCameraBtn');
+    if (openCameraBtn) {
+        openCameraBtn.addEventListener('click', () => {
+            if (!window.PPGCameraStudio) {
+                alert('Live Camera Studio failed to load. Please check your connection and reload the page.');
+                return;
+            }
+            window.PPGCameraStudio.open({
+                preset: {
+                    widthMM: (PHOTO_WIDTH / DPI) * MM_TO_INCH,
+                    heightMM: (PHOTO_HEIGHT / DPI) * MM_TO_INCH
+                },
+                onCapture: (file, autoCropRect) => {
+                    loadImage(file, autoCropRect);
+                }
+            });
+        });
+    }
+
+    function loadImage(file, autoCropRect) {
         const reader = new FileReader();
         reader.onload = (e) => {
             originalImage = new Image();
             originalImage.onload = () => {
-                initCropper();
+                initCropper(autoCropRect);
             };
             originalImage.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }
 
+    // Expose a hook so the Live Camera Studio (js/cameraStudio.js) can hand
+    // off a captured photo (and an optional AI-computed auto-crop rectangle,
+    // in natural image pixel coordinates) into the existing crop/edit flow.
+    window.PPG_loadCapturedPhoto = loadImage;
+
     // Cropper Initialization
-    function initCropper() {
+    function initCropper(autoCropRect) {
         showSection(cropArea);
         showCard(cropToolsCard);
         
@@ -202,6 +227,13 @@
             cropBoxMovable: true,
             cropBoxResizable: true,
             toggleDragModeOnDblclick: false,
+            ready: function () {
+                // Smart Auto-Crop: if the camera studio detected a face and
+                // computed an optimal crop box, apply it automatically.
+                if (autoCropRect && autoCropRect.width > 0 && autoCropRect.height > 0) {
+                    cropper.setData(autoCropRect);
+                }
+            }
         });
     }
 

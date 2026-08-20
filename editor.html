@@ -39,6 +39,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+    <link rel="stylesheet" href="css/camera-studio.css">
     
     <!-- Preconnect -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -136,6 +137,8 @@
                 <div class="card">
                     <h3 class="card-title">📤 Upload Photo</h3>
                     <input type="file" id="photoUpload" accept="image/*" />
+                    <button type="button" id="openCameraBtn" class="btn-secondary camera-btn-open">📷 Use Live Camera Studio</button>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">🔒 Camera photos are processed locally — never uploaded.</p>
                 </div>
 
                 <!-- Image Adjustments -->
@@ -345,6 +348,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/cameraStudio.js"></script>
     <script src="js/editor.js"></script>
 </body>
 </html>
