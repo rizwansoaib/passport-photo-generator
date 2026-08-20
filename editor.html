@@ -105,8 +105,19 @@
     <div class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
         <span class="theme-icon">🌙</span>
     </div>
+    <div class="language-switcher">
+        <label for="languageSelect" data-i18n="languageLabel" style="margin-right: 6px;">🌐 Language</label>
+        <select id="languageSelect">
+            <option value="en">🇬🇧 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="pt">🇵🇹 Português</option>
+        </select>
+    </div>
     <div class="container">
-        <h1>Passport Photo Editor</h1>
+        <h1 data-i18n="editorTitle">Passport Photo Editor</h1>
         
         <!-- Header Info -->
         <div class="app-header">
@@ -118,15 +129,15 @@
                 <span class="badge badge-secure">🛡️ Privacy First</span>
                 <span class="badge badge-fast">⚡ Instant Processing</span>
             </div>
-            <p class="header-description">
+            <p class="header-description" data-i18n="editorHeaderDescription">
                 Professional photo editor with advanced tools • Crop, adjust & enhance • Works entirely offline
             </p>
         </div>
         
         <!-- Navigation -->
         <div class="editor-nav">
-            <a href="index.html" class="nav-link">← Simple Mode</a>
-            <span class="nav-title">Advanced Editor</span>
+            <a href="index.html" class="nav-link" data-i18n="simpleModeLink">← Simple Mode</a>
+            <span class="nav-title" data-i18n="advancedEditorNavTitle">Advanced Editor</span>
         </div>
 
         <div class="editor-grid">
@@ -135,15 +146,32 @@
                 
                 <!-- Upload Section -->
                 <div class="card">
-                    <h3 class="card-title">📤 Upload Photo</h3>
+                    <h3 class="card-title" data-i18n="uploadPhotoTitle">📤 Upload Photo</h3>
                     <input type="file" id="photoUpload" accept="image/*" />
-                    <button type="button" id="openCameraBtn" class="btn-secondary camera-btn-open">📷 Use Live Camera Studio</button>
-                    <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">🔒 Camera photos are processed locally — never uploaded.</p>
+                    <button type="button" id="openCameraBtn" class="btn-secondary camera-btn-open" data-i18n="useCameraBtn">📷 Use Live Camera Studio</button>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;" data-i18n="cameraPrivacyNote">🔒 Camera photos are processed locally — never uploaded.</p>
+                </div>
+
+                <!-- Background (AI removal + color) -->
+                <div class="card" id="backgroundCard" style="display: none;">
+                    <h3 class="card-title" data-i18n="backgroundTitle">🖼️ Background</h3>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="removeBgToggle" />
+                        <span data-i18n="removeBgLabel">✂️ Remove Background (AI)</span>
+                    </label>
+                    <p id="bgRemovalStatus" class="hint-text" style="display: none;"></p>
+                    <div class="bg-color-swatches">
+                        <button type="button" class="bg-swatch active" data-color="#ffffff" style="background:#ffffff" title="White"></button>
+                        <button type="button" class="bg-swatch" data-color="#1e88e5" style="background:#1e88e5" title="Blue"></button>
+                        <button type="button" class="bg-swatch" data-color="#d32f2f" style="background:#d32f2f" title="Red"></button>
+                        <button type="button" class="bg-swatch" data-color="#e0e0e0" style="background:#e0e0e0" title="Grey"></button>
+                        <input type="color" id="customBgColor" value="#ffffff" title="Custom color" />
+                    </div>
                 </div>
 
                 <!-- Image Adjustments -->
                 <div class="card" id="adjustmentsCard" style="display: none;">
-                    <h3 class="card-title">🎨 Adjustments</h3>
+                    <h3 class="card-title" data-i18n="adjustmentsTitle">🎨 Adjustments</h3>
                     
                     <div class="slider-group">
                         <label>
@@ -196,6 +224,37 @@
                     <div class="adjustment-buttons">
                         <button id="autoEnhance" class="btn-secondary">✨ Auto Enhance</button>
                         <button id="resetAdjustments" class="btn-outline">🔄 Reset All</button>
+                    </div>
+
+                    <h4 style="margin: 20px 0 10px 0; font-size: 15px; color: var(--text-primary);" data-i18n="filtersTitle">🎞️ Filters &amp; Effects</h4>
+                    <div class="filter-presets">
+                        <button type="button" class="filter-btn active" data-filter="none">None</button>
+                        <button type="button" class="filter-btn" data-filter="grayscale">Grayscale</button>
+                        <button type="button" class="filter-btn" data-filter="sepia">Sepia</button>
+                        <button type="button" class="filter-btn" data-filter="vintage">Vintage</button>
+                        <button type="button" class="filter-btn" data-filter="cool">Cool</button>
+                        <button type="button" class="filter-btn" data-filter="warm">Warm</button>
+                        <button type="button" class="filter-btn" data-filter="vivid">Vivid</button>
+                    </div>
+                    <label class="checkbox-label" style="margin-top: 10px;">
+                        <input type="checkbox" id="vignetteToggle" />
+                        <span>🕶️ Vignette</span>
+                    </label>
+                </div>
+
+                <!-- Batch Processing -->
+                <div class="card" id="batchCard" style="display: none;">
+                    <h3 class="card-title" data-i18n="batchTitle">📦 Batch Processing</h3>
+                    <p class="hint-text" data-i18n="batchHint">Apply the current adjustments, background &amp; filters to multiple photos at once.</p>
+                    <input type="file" id="batchUpload" accept="image/*" multiple />
+                    <div id="batchList" class="batch-list"></div>
+                    <div class="adjustment-buttons">
+                        <button id="processBatch" class="btn-primary" disabled data-i18n="processBatchBtn">⚙️ Process Batch</button>
+                    </div>
+                    <div id="batchProgress" class="hint-text"></div>
+                    <div class="adjustment-buttons">
+                        <button id="downloadBatchZip" class="btn-secondary" style="display: none;" data-i18n="downloadZipBtn">📥 Download All (ZIP)</button>
+                        <button id="downloadBatchPDF" class="btn-secondary" style="display: none;" data-i18n="downloadBatchPdfBtn">📥 Download All (PDF)</button>
                     </div>
                 </div>
 
@@ -297,11 +356,23 @@
 
                 <!-- Preview Canvas -->
                 <div id="previewArea" class="preview-area" style="display: none;">
-                    <h3>Preview</h3>
+                    <h3 data-i18n="previewLabel">Preview</h3>
                     <canvas id="previewCanvas"></canvas>
+
+                    <!-- Before/After Comparison -->
+                    <div id="compareContainer" class="compare-container" style="display: none;">
+                        <div class="compare-slider-wrap">
+                            <img id="compareAfter" class="compare-img" alt="After editing" />
+                            <div id="compareBeforeWrap" class="compare-before-wrap">
+                                <img id="compareBefore" class="compare-img" alt="Before editing" />
+                            </div>
+                            <input type="range" id="compareRange" min="0" max="100" value="50" class="compare-range" />
+                        </div>
+                    </div>
                     
                     <div class="action-buttons">
                         <button id="backToCrop" class="btn-outline">← Back to Crop</button>
+                        <button id="toggleCompare" class="btn-outline" data-i18n="compareBtn">🔍 Before/After</button>
                         <button id="downloadSingle" class="btn-secondary">📥 Download Single</button>
                         <button id="generateA4" class="btn-primary">📄 Generate A4</button>
                     </div>
@@ -348,6 +419,10 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/vendor/jszip.min.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/faceDetect.js"></script>
+    <script src="js/backgroundRemoval.js"></script>
     <script src="js/cameraStudio.js"></script>
     <script src="js/editor.js"></script>
 </body>

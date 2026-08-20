@@ -29,8 +29,17 @@ Best free passport photo maker for India, USA, Canada, UK, Schengen, China and 2
 - Sharpness enhancement
 - Blur effects
 - One-click Auto Enhance
+- More filter presets — Grayscale, Sepia, Vintage, Cool, Warm, Vivid + Vignette effect
 
-### 🤖 AI Live Camera Studio (New)
+### 🧠 AI-Powered Tools (New)
+
+- **AI background removal** with instant color swap (white, blue, red, grey or any custom color) — all on-device
+- **Face detection auto-crop** — uploaded photos are automatically centered and cropped around the detected face
+- **Before/After comparison slider** to see your edits side-by-side with the original
+- **Batch processing** — apply the same crop, background and filters to multiple photos at once, then export as ZIP or a multi-page PDF
+- **Multi-language interface** — English, Español, Français, हिन्दी, Deutsch, Português
+
+### 🤖 AI Live Camera Studio
 
 - **Live camera capture** with front/rear switching and resolution selection
 - **Real-time face detection & coaching** ("move closer", "straighten your head", "hold still"…) powered by on-device MediaPipe face landmarks
@@ -259,14 +268,17 @@ git push origin feature/amazing-feature
 - [x] Electron-based cross-platform support
 - [x] Native application experience
 
-### Version 2.1 (Planned)
+### Version 2.1 (Completed)
 
-- [ ] AI background removal
-- [ ] Face detection and auto-crop
-- [ ] Multi-language support
-- [ ] Before/After comparison slider
-- [ ] More filters and effects
-- [ ] Batch processing
+- [x] AI background removal + background color presets (white, blue, red, grey, custom)
+- [x] Face detection and auto-crop (uploaded photos, in addition to Live Camera Studio)
+- [x] Multi-language support (English, Spanish, French, Hindi, German, Portuguese)
+- [x] Before/After comparison slider
+- [x] More filters and effects (Grayscale, Sepia, Vintage, Cool, Warm, Vivid, Vignette)
+- [x] Batch processing (apply the same edits to multiple photos, export as ZIP/PDF)
+
+### Version 2.2 (Planned)
+
 - [ ] Native mobile apps
 
 ---

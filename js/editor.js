@@ -78,6 +78,20 @@
         blur: 0
     };
     let backgroundColor = '#ffffff';
+    let bgRemovalEnabled = false;
+    let bgRemovedCanvas = null;
+    let filterPreset = 'none';
+    let vignetteEnabled = false;
+
+    const FILTER_PRESETS = {
+        none: '',
+        grayscale: 'grayscale(100%)',
+        sepia: 'sepia(80%)',
+        vintage: 'sepia(40%) contrast(90%) brightness(105%) saturate(85%)',
+        cool: 'saturate(90%) hue-rotate(15deg) brightness(102%)',
+        warm: 'saturate(110%) hue-rotate(-10deg) brightness(103%)',
+        vivid: 'saturate(140%) contrast(110%)'
+    };
 
     // DOM Elements
     const photoUpload = document.getElementById('photoUpload');
@@ -93,6 +107,8 @@
     const cropToolsCard = document.getElementById('cropToolsCard');
     const adjustmentsCard = document.getElementById('adjustmentsCard');
     const sizeSelectionCard = document.getElementById('sizeSelectionCard');
+    const backgroundCard = document.getElementById('backgroundCard');
+    const batchCard = document.getElementById('batchCard');
     
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.querySelector('.theme-icon');
@@ -191,6 +207,21 @@
             originalImage = new Image();
             originalImage.onload = () => {
                 initCropper(autoCropRect);
+
+                // If no auto-crop rect was already supplied (e.g. from the
+                // Live Camera Studio), try to compute one from an uploaded
+                // photo using on-device AI face detection. Non-blocking: the
+                // cropper is already visible and usable while this resolves.
+                if (!autoCropRect && window.PPGFaceDetect) {
+                    const aspectRatio = PHOTO_WIDTH / PHOTO_HEIGHT;
+                    window.PPGFaceDetect.detectAutoCropRect(originalImage, aspectRatio)
+                        .then((rect) => {
+                            if (rect && cropper) {
+                                cropper.setData(rect);
+                            }
+                        })
+                        .catch(() => { /* ignore: fall back to manual crop */ });
+                }
             };
             originalImage.src = e.target.result;
         };
@@ -272,9 +303,12 @@
             imageSmoothingQuality: 'high'
         });
         
+        resetBackgroundRemoval();
         showSection(previewArea);
         hideCard(cropToolsCard);
         showCard(adjustmentsCard);
+        showCard(backgroundCard);
+        showCard(batchCard);
         
         renderPreview();
     });
@@ -294,9 +328,12 @@
         PHOTO_WIDTH = originalImage.width;
         PHOTO_HEIGHT = originalImage.height;
         
+        resetBackgroundRemoval();
         showSection(previewArea);
         hideCard(cropToolsCard);
         showCard(adjustmentsCard);
+        showCard(backgroundCard);
+        showCard(batchCard);
         
         renderPreview();
     });
@@ -305,6 +342,8 @@
         showSection(cropArea);
         showCard(cropToolsCard);
         hideCard(adjustmentsCard);
+        hideCard(backgroundCard);
+        hideCard(batchCard);
     });
 
     // Adjustments
@@ -405,6 +444,139 @@
         if (croppedCanvas) renderPreview();
     });
 
+    // ------------------------------------------------------------------
+    // Background: AI removal + color swatches
+    // ------------------------------------------------------------------
+    const removeBgToggle = document.getElementById('removeBgToggle');
+    const bgRemovalStatus = document.getElementById('bgRemovalStatus');
+    const customBgColorInput = document.getElementById('customBgColor');
+
+    function resetBackgroundRemoval() {
+        bgRemovedCanvas = null;
+        bgRemovalEnabled = false;
+        if (removeBgToggle) removeBgToggle.checked = false;
+        if (bgRemovalStatus) bgRemovalStatus.style.display = 'none';
+    }
+
+    async function applyBackgroundRemoval() {
+        if (!croppedCanvas || !window.PPGBackgroundRemoval) {
+            bgRemovalStatus.textContent = '⚠️ Background removal is not available (offline or blocked resource).';
+            bgRemovalStatus.style.display = 'block';
+            removeBgToggle.checked = false;
+            bgRemovalEnabled = false;
+            return;
+        }
+
+        bgRemovalStatus.textContent = '⏳ Removing background with AI…';
+        bgRemovalStatus.style.display = 'block';
+
+        const result = await window.PPGBackgroundRemoval.removeBackground(croppedCanvas);
+
+        if (!result) {
+            bgRemovalStatus.textContent = '⚠️ Background removal failed (offline or model unavailable). Showing original photo.';
+            removeBgToggle.checked = false;
+            bgRemovalEnabled = false;
+            return;
+        }
+
+        bgRemovedCanvas = result;
+        bgRemovalStatus.textContent = '✅ Background removed — pick a color below.';
+        renderPreview();
+        if (a4Area.style.display !== 'none') updateA4WithNewSize();
+    }
+
+    if (removeBgToggle) {
+        removeBgToggle.addEventListener('change', () => {
+            bgRemovalEnabled = removeBgToggle.checked;
+            if (bgRemovalEnabled) {
+                applyBackgroundRemoval();
+            } else {
+                bgRemovalStatus.style.display = 'none';
+                renderPreview();
+                if (a4Area.style.display !== 'none') updateA4WithNewSize();
+            }
+        });
+    }
+
+    document.querySelectorAll('.bg-swatch').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            backgroundColor = btn.dataset.color;
+            if (customBgColorInput) customBgColorInput.value = backgroundColor;
+            document.querySelectorAll('.bg-swatch').forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (croppedCanvas) {
+                renderPreview();
+                if (a4Area.style.display !== 'none') updateA4WithNewSize();
+            }
+        });
+    });
+
+    if (customBgColorInput) {
+        customBgColorInput.addEventListener('input', (e) => {
+            backgroundColor = e.target.value;
+            document.querySelectorAll('.bg-swatch').forEach((b) => b.classList.remove('active'));
+            if (croppedCanvas) {
+                renderPreview();
+                if (a4Area.style.display !== 'none') updateA4WithNewSize();
+            }
+        });
+    }
+
+    // Returns the canvas that should be drawn as the photo's subject: the
+    // AI background-removed (transparent) canvas when enabled, or the
+    // plain cropped canvas otherwise.
+    function getSourceCanvas() {
+        return (bgRemovalEnabled && bgRemovedCanvas) ? bgRemovedCanvas : croppedCanvas;
+    }
+
+    // ------------------------------------------------------------------
+    // Filters & effects
+    // ------------------------------------------------------------------
+    document.querySelectorAll('.filter-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            filterPreset = btn.dataset.filter;
+            document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (croppedCanvas) {
+                renderPreview();
+                if (a4Area.style.display !== 'none') updateA4WithNewSize();
+            }
+        });
+    });
+
+    const vignetteToggle = document.getElementById('vignetteToggle');
+    if (vignetteToggle) {
+        vignetteToggle.addEventListener('change', () => {
+            vignetteEnabled = vignetteToggle.checked;
+            if (croppedCanvas) {
+                renderPreview();
+                if (a4Area.style.display !== 'none') updateA4WithNewSize();
+            }
+        });
+    }
+
+    function buildFilterString() {
+        return `
+            ${FILTER_PRESETS[filterPreset] || ''}
+            brightness(${100 + adjustments.brightness}%)
+            contrast(${adjustments.contrast}%)
+            saturate(${adjustments.saturation}%)
+            blur(${adjustments.blur}px)
+        `;
+    }
+
+    function drawVignette(ctx, width, height) {
+        if (!vignetteEnabled) return;
+        const gradient = ctx.createRadialGradient(
+            width / 2, height / 2, height * 0.3,
+            width / 2, height / 2, height * 0.75
+        );
+        gradient.addColorStop(0, 'rgba(0,0,0,0)');
+        gradient.addColorStop(1, 'rgba(0,0,0,0.35)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+    }
+
     // Render Preview
     function renderPreview() {
         if (!croppedCanvas) return;
@@ -419,15 +591,10 @@
         ctx.fillRect(0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
         
         // Apply filters
-        ctx.filter = `
-            brightness(${100 + adjustments.brightness}%)
-            contrast(${adjustments.contrast}%)
-            saturate(${adjustments.saturation}%)
-            blur(${adjustments.blur}px)
-        `;
+        ctx.filter = buildFilterString();
         
         // Draw image
-        ctx.drawImage(croppedCanvas, 0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
+        ctx.drawImage(getSourceCanvas(), 0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
         
         // Reset filter
         ctx.filter = 'none';
@@ -439,6 +606,54 @@
             ctx.fillRect(0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
             ctx.globalAlpha = 1;
         }
+
+        drawVignette(ctx, PHOTO_WIDTH, PHOTO_HEIGHT);
+
+        refreshCompareIfVisible();
+    }
+
+    // ------------------------------------------------------------------
+    // Before / After comparison slider
+    // ------------------------------------------------------------------
+    const toggleCompareBtn = document.getElementById('toggleCompare');
+    const compareContainer = document.getElementById('compareContainer');
+    const compareBefore = document.getElementById('compareBefore');
+    const compareAfter = document.getElementById('compareAfter');
+    const compareBeforeWrap = document.getElementById('compareBeforeWrap');
+    const compareRange = document.getElementById('compareRange');
+
+    function updateCompareSliderPosition() {
+        if (compareRange && compareBeforeWrap) {
+            compareBeforeWrap.style.width = compareRange.value + '%';
+        }
+    }
+
+    function refreshCompareIfVisible() {
+        if (compareContainer && compareContainer.style.display !== 'none' && croppedCanvas) {
+            compareAfter.src = previewCanvas.toDataURL('image/jpeg', 0.92);
+            compareBefore.src = croppedCanvas.toDataURL('image/jpeg', 0.92);
+        }
+    }
+
+    if (toggleCompareBtn) {
+        toggleCompareBtn.addEventListener('click', () => {
+            if (!croppedCanvas) return;
+            const isShowing = compareContainer.style.display !== 'none';
+            if (isShowing) {
+                compareContainer.style.display = 'none';
+                previewCanvas.style.display = '';
+            } else {
+                compareBefore.src = croppedCanvas.toDataURL('image/jpeg', 0.92);
+                compareAfter.src = previewCanvas.toDataURL('image/jpeg', 0.92);
+                compareContainer.style.display = 'block';
+                previewCanvas.style.display = 'none';
+                updateCompareSliderPosition();
+            }
+        });
+    }
+
+    if (compareRange) {
+        compareRange.addEventListener('input', updateCompareSliderPosition);
     }
 
     // Generate A4
@@ -620,14 +835,9 @@
         tempCtx.fillRect(0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
         
         // Apply filters and draw resized image
-        tempCtx.filter = `
-            brightness(${100 + adjustments.brightness}%)
-            contrast(${adjustments.contrast}%)
-            saturate(${adjustments.saturation}%)
-            blur(${adjustments.blur}px)
-        `;
+        tempCtx.filter = buildFilterString();
         
-        tempCtx.drawImage(croppedCanvas, 0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
+        tempCtx.drawImage(getSourceCanvas(), 0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
         tempCtx.filter = 'none';
         
         // Apply exposure
@@ -637,6 +847,8 @@
             tempCtx.fillRect(0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
             tempCtx.globalAlpha = 1;
         }
+
+        drawVignette(tempCtx, PHOTO_WIDTH, PHOTO_HEIGHT);
         
         // Update preview canvas
         previewCanvas.width = PHOTO_WIDTH;
@@ -649,6 +861,8 @@
         
         // Update photo count slider
         updatePhotoCountSlider();
+
+        refreshCompareIfVisible();
     }
 
     // Print
@@ -690,6 +904,205 @@
             URL.revokeObjectURL(url);
         }, 'image/jpeg', 1.0);
     });
+
+    // ------------------------------------------------------------------
+    // Batch Processing: apply the same crop/adjustments/background/filters
+    // to multiple uploaded photos at once.
+    // ------------------------------------------------------------------
+    let batchFiles = [];
+    let batchResults = []; // [{ name, canvas }]
+
+    const batchUpload = document.getElementById('batchUpload');
+    const batchListEl = document.getElementById('batchList');
+    const processBatchBtn = document.getElementById('processBatch');
+    const downloadBatchZipBtn = document.getElementById('downloadBatchZip');
+    const downloadBatchPDFBtn = document.getElementById('downloadBatchPDF');
+    const batchProgressEl = document.getElementById('batchProgress');
+
+    function loadImageFromFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = e.target.result;
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function centerCropRect(w, h, aspectRatio) {
+        let cropW = w;
+        let cropH = w / aspectRatio;
+        if (cropH > h) {
+            cropH = h;
+            cropW = h * aspectRatio;
+        }
+        return { x: (w - cropW) / 2, y: (h - cropH) / 2, width: cropW, height: cropH };
+    }
+
+    function sanitizeFileName(name) {
+        const base = (name || 'photo').replace(/\.[^/.]+$/, '').replace(/[^a-z0-9_-]/gi, '_');
+        return `${base || 'photo'}.jpg`;
+    }
+
+    async function processOneBatchFile(file) {
+        const img = await loadImageFromFile(file);
+        const aspectRatio = PHOTO_WIDTH / PHOTO_HEIGHT;
+        const w = img.naturalWidth || img.width;
+        const h = img.naturalHeight || img.height;
+
+        let cropRect = null;
+        if (window.PPGFaceDetect) {
+            try {
+                cropRect = await window.PPGFaceDetect.detectAutoCropRect(img, aspectRatio);
+            } catch (err) {
+                cropRect = null;
+            }
+        }
+        if (!cropRect) {
+            cropRect = centerCropRect(w, h, aspectRatio);
+        }
+
+        const cropped = document.createElement('canvas');
+        cropped.width = PHOTO_WIDTH;
+        cropped.height = PHOTO_HEIGHT;
+        cropped.getContext('2d').drawImage(
+            img,
+            cropRect.x, cropRect.y, cropRect.width, cropRect.height,
+            0, 0, PHOTO_WIDTH, PHOTO_HEIGHT
+        );
+
+        let source = cropped;
+        if (bgRemovalEnabled && window.PPGBackgroundRemoval) {
+            const removed = await window.PPGBackgroundRemoval.removeBackground(cropped);
+            if (removed) source = removed;
+        }
+
+        const out = document.createElement('canvas');
+        out.width = PHOTO_WIDTH;
+        out.height = PHOTO_HEIGHT;
+        const outCtx = out.getContext('2d');
+
+        outCtx.fillStyle = backgroundColor;
+        outCtx.fillRect(0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
+
+        outCtx.filter = buildFilterString();
+        outCtx.drawImage(source, 0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
+        outCtx.filter = 'none';
+
+        if (adjustments.exposure !== 0) {
+            outCtx.globalAlpha = Math.abs(adjustments.exposure) / 200;
+            outCtx.fillStyle = adjustments.exposure > 0 ? 'white' : 'black';
+            outCtx.fillRect(0, 0, PHOTO_WIDTH, PHOTO_HEIGHT);
+            outCtx.globalAlpha = 1;
+        }
+
+        drawVignette(outCtx, PHOTO_WIDTH, PHOTO_HEIGHT);
+
+        return out;
+    }
+
+    if (batchUpload) {
+        batchUpload.addEventListener('change', (e) => {
+            batchFiles = Array.from(e.target.files || []);
+            batchResults = [];
+            batchListEl.innerHTML = batchFiles.length
+                ? `<p>${batchFiles.length} photo(s) selected for batch processing.</p>`
+                : '';
+            processBatchBtn.disabled = batchFiles.length === 0;
+            downloadBatchZipBtn.style.display = 'none';
+            downloadBatchPDFBtn.style.display = 'none';
+            batchProgressEl.textContent = '';
+        });
+    }
+
+    if (processBatchBtn) {
+        processBatchBtn.addEventListener('click', async () => {
+            if (batchFiles.length === 0 || !croppedCanvas) return;
+            processBatchBtn.disabled = true;
+            downloadBatchZipBtn.style.display = 'none';
+            downloadBatchPDFBtn.style.display = 'none';
+            batchResults = [];
+
+            for (let i = 0; i < batchFiles.length; i++) {
+                batchProgressEl.textContent = `Processing ${i + 1} of ${batchFiles.length}…`;
+                try {
+                    const canvas = await processOneBatchFile(batchFiles[i]);
+                    batchResults.push({ name: batchFiles[i].name, canvas });
+                } catch (err) {
+                    console.warn('Batch: failed to process', batchFiles[i].name, err);
+                }
+            }
+
+            batchProgressEl.textContent = `✅ Processed ${batchResults.length} of ${batchFiles.length} photo(s).`;
+            processBatchBtn.disabled = false;
+            downloadBatchZipBtn.style.display = batchResults.length ? 'inline-flex' : 'none';
+            downloadBatchPDFBtn.style.display = batchResults.length ? 'inline-flex' : 'none';
+        });
+    }
+
+    if (downloadBatchZipBtn) {
+        downloadBatchZipBtn.addEventListener('click', async () => {
+            if (!window.JSZip || batchResults.length === 0) return;
+            const zip = new window.JSZip();
+            for (const item of batchResults) {
+                const blob = await new Promise((resolve) => item.canvas.toBlob(resolve, 'image/jpeg', 1.0));
+                zip.file(sanitizeFileName(item.name), blob);
+            }
+            const content = await zip.generateAsync({ type: 'blob' });
+            const url = URL.createObjectURL(content);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'passport-photos-batch.zip';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+    }
+
+    if (downloadBatchPDFBtn) {
+        downloadBatchPDFBtn.addEventListener('click', () => {
+            if (!window.jspdf || batchResults.length === 0) return;
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+            const margin = 60;
+            const spacing = 30;
+            const availableWidth = A4_WIDTH - 2 * margin;
+            const availableHeight = A4_HEIGHT - 2 * margin;
+            const perRow = Math.max(1, Math.floor((availableWidth + spacing) / (PHOTO_WIDTH + spacing)));
+            const perCol = Math.max(1, Math.floor((availableHeight + spacing) / (PHOTO_HEIGHT + spacing)));
+            const perSheet = perRow * perCol;
+
+            batchResults.forEach((item, index) => {
+                if (index > 0) pdf.addPage();
+
+                const sheetCanvas = document.createElement('canvas');
+                sheetCanvas.width = A4_WIDTH;
+                sheetCanvas.height = A4_HEIGHT;
+                const sCtx = sheetCanvas.getContext('2d');
+                sCtx.fillStyle = 'white';
+                sCtx.fillRect(0, 0, A4_WIDTH, A4_HEIGHT);
+
+                let count = 0;
+                for (let row = 0; row < perCol && count < perSheet; row++) {
+                    for (let col = 0; col < perRow && count < perSheet; col++) {
+                        const x = margin + col * (PHOTO_WIDTH + spacing);
+                        const y = margin + row * (PHOTO_HEIGHT + spacing);
+                        sCtx.drawImage(item.canvas, x, y, PHOTO_WIDTH, PHOTO_HEIGHT);
+                        count++;
+                    }
+                }
+
+                const imgData = sheetCanvas.toDataURL('image/jpeg', 1.0);
+                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+            });
+
+            pdf.save('passport-photos-batch.pdf');
+        });
+    }
 
     // Register Service Worker for PWA
     if ('serviceWorker' in navigator) {
