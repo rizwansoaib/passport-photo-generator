@@ -1534,3 +1534,193 @@ body.dark-mode .footer-link:hover {
         font-size: 14px;
     }
 }
+
+/* ------------------------------------------------------------------ */
+/* Language Switcher                                                   */
+/* ------------------------------------------------------------------ */
+.language-switcher {
+    position: fixed;
+    top: 30px;
+    right: 100px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    background: var(--card-bg, #fff);
+    padding: 8px 14px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    font-size: 13px;
+}
+
+.language-switcher label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.language-switcher select {
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 6px;
+    padding: 4px 6px;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .language-switcher {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    .language-switcher label {
+        display: none;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* Background (AI removal + color swatches)                            */
+/* ------------------------------------------------------------------ */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.hint-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 8px 0;
+}
+
+.bg-color-swatches {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.bg-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color, #ddd);
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.bg-swatch:hover,
+.bg-swatch.active {
+    border-color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+#customBgColor {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Filter presets                                                       */
+/* ------------------------------------------------------------------ */
+.filter-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filter-btn {
+    padding: 8px 14px;
+    background: transparent;
+    border: 2px solid var(--border-color, #ddd);
+    color: var(--text-primary);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    border-color: var(--accent-color);
+    background: var(--accent-color);
+    color: white;
+}
+
+/* ------------------------------------------------------------------ */
+/* Before / After comparison slider                                    */
+/* ------------------------------------------------------------------ */
+.compare-container {
+    margin-top: 16px;
+}
+
+.compare-slider-wrap {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.compare-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    user-select: none;
+    pointer-events: none;
+}
+
+.compare-before-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 50%;
+    overflow: hidden;
+    border-right: 2px solid var(--accent-color);
+}
+
+.compare-before-wrap .compare-img {
+    width: auto;
+    height: 100%;
+    max-width: none;
+}
+
+.compare-range {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+}
+
+/* ------------------------------------------------------------------ */
+/* Batch processing                                                     */
+/* ------------------------------------------------------------------ */
+.batch-list {
+    margin: 10px 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+}

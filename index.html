@@ -226,9 +226,20 @@
     <div class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
         <span class="theme-icon">🌙</span>
     </div>
+    <div class="language-switcher">
+        <label for="languageSelect" data-i18n="languageLabel" style="margin-right: 6px;">🌐 Language</label>
+        <select id="languageSelect">
+            <option value="en">🇬🇧 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="pt">🇵🇹 Português</option>
+        </select>
+    </div>
     <div class="container"
 >
-        <h1>Passport Photo Generator</h1>
+        <h1 data-i18n="appTitle">Passport Photo Generator</h1>
         
         <!-- Header Info -->
         <div class="app-header">
@@ -240,24 +251,24 @@
                 <span class="badge badge-secure">🛡️ Privacy First</span>
                 <span class="badge badge-fast">⚡ Instant Processing</span>
             </div>
-            <p class="header-description">
+            <p class="header-description" data-i18n="headerDescription">
                 Create professional passport photos instantly • Works entirely in your browser • No data uploaded to servers
             </p>
         </div>
         
         <div class="editor-nav" style="margin-bottom: 30px;">
-            <a href="editor.html" class="nav-link" style="color: #667eea; text-decoration: none; font-weight: 600; padding: 12px 24px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; display: inline-block; transition: all 0.3s ease;">
+            <a href="editor.html" class="nav-link" data-i18n="advancedEditorLink" style="color: #667eea; text-decoration: none; font-weight: 600; padding: 12px 24px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; display: inline-block; transition: all 0.3s ease;">
                 ✨ Advanced Editor →
             </a>
         </div>
         
         <div class="upload-section">
-            <label for="photoUpload" class="upload-label">Upload Photo:</label>
+            <label for="photoUpload" class="upload-label" data-i18n="uploadLabel">Upload Photo:</label>
             <input type="file" id="photoUpload" accept="image/*" />
-            <button type="button" id="openCameraBtn" class="btn-secondary camera-btn-open">📷 Use Live Camera Studio</button>
-            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">🔒 Camera photos are processed locally — never uploaded.</p>
+            <button type="button" id="openCameraBtn" class="btn-secondary camera-btn-open" data-i18n="useCameraBtn">📷 Use Live Camera Studio</button>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;" data-i18n="cameraPrivacyNote">🔒 Camera photos are processed locally — never uploaded.</p>
             
-            <label for="photoSize">Photo Size:</label>
+            <label for="photoSize" data-i18n="photoSizeLabel">Photo Size:</label>
             <select id="photoSize">
                 <option value="35x45">India/UK (35×45 mm)</option>
                 <option value="51x51">USA (51×51 mm)</option>
@@ -266,22 +277,22 @@
             </select>
             
             <div id="customSizeInputs" style="display: none;">
-                <label for="customWidth">Width (mm):</label>
+                <label for="customWidth" data-i18n="widthLabel">Width (mm):</label>
                 <input type="number" id="customWidth" min="10" max="100" value="35" />
                 
-                <label for="customHeight">Height (mm):</label>
+                <label for="customHeight" data-i18n="heightLabel">Height (mm):</label>
                 <input type="number" id="customHeight" min="10" max="150" value="45" />
             </div>
             
         </div>
         <div class="preview-section">
-            <h3>Preview:</h3>
+            <h3 data-i18n="previewLabel">Preview:</h3>
             <canvas id="photoCanvas"></canvas>
             <div class="action-buttons">
                 <button id="printBtn" class="print-btn" style="display: none;">
-                    <span class="print-icon">🖨️</span> Print Photos
+                    <span class="print-icon">🖨️</span> <span data-i18n="printPhotosBtn">Print Photos</span>
                 </button>
-                <button id="generatePdf" style="display: none;">📄 Generate PDF</button>
+                <button id="generatePdf" style="display: none;" data-i18n="generatePdfBtn">📄 Generate PDF</button>
             </div>
         </div>
     </div>
@@ -291,10 +302,10 @@
         <div class="footer-content">
             <div class="footer-item">
                 <span class="footer-icon">🔒</span>
-                <span>Works Offline • No Data Saved</span>
+                <span data-i18n="footerOffline">Works Offline • No Data Saved</span>
             </div>
             <div class="footer-item">
-                <span>Made with ❤️ in India</span>
+                <span data-i18n="footerMade">Made with ❤️ in India</span>
             </div>
             <div class="footer-item">
                 <a href="https://github.com/rizwansoaib" target="_blank" rel="noopener noreferrer" class="footer-link">
@@ -306,6 +317,7 @@
     </footer>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/i18n.js"></script>
     <script src="js/cameraStudio.js"></script>
     <script src="js/app.js"></script>
 </body>
