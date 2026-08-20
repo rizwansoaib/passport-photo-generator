@@ -63,6 +63,7 @@
     
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/camera-studio.css">
     
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -253,6 +254,8 @@
         <div class="upload-section">
             <label for="photoUpload" class="upload-label">Upload Photo:</label>
             <input type="file" id="photoUpload" accept="image/*" />
+            <button type="button" id="openCameraBtn" class="btn-secondary camera-btn-open">📷 Use Live Camera Studio</button>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">🔒 Camera photos are processed locally — never uploaded.</p>
             
             <label for="photoSize">Photo Size:</label>
             <select id="photoSize">
@@ -303,6 +306,7 @@
     </footer>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/cameraStudio.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

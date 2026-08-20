@@ -5,17 +5,19 @@
  * for the passport photo generator PWA.
  */
 
-const CACHE_NAME = 'passport-photo-v2';
+const CACHE_NAME = 'passport-photo-v3';
 const urlsToCache = [
   './',
   './index.html',
   './editor.html',
   './css/styles.css',
+  './css/camera-studio.css',
   './js/app.js',
   './js/editor.js',
   './js/photoUpload.js',
   './js/canvasRenderer.js',
   './js/pdfGenerator.js',
+  './js/cameraStudio.js',
   './manifest.json',
   // CDN resources will be cached on first load
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
@@ -74,8 +76,11 @@ self.addEventListener('fetch', (event) => {
         const fetchRequest = event.request.clone();
         
         return fetch(fetchRequest).then((response) => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
+          // Check if valid response. Allow same-origin ('basic') responses
+          // and successful cross-origin CDN responses ('cors') so that
+          // third-party assets (e.g. the client-side face-detection model
+          // used by Live Camera Studio) can also be cached for offline use.
+          if (!response || response.status !== 200 || (response.type !== 'basic' && response.type !== 'cors')) {
             return response;
           }
           

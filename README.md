@@ -30,6 +30,16 @@ Best free passport photo maker for India, USA, Canada, UK, Schengen, China and 2
 - Blur effects
 - One-click Auto Enhance
 
+### 🤖 AI Live Camera Studio (New)
+
+- **Live camera capture** with front/rear switching and resolution selection
+- **Real-time face detection & coaching** ("move closer", "straighten your head", "hold still"…) powered by on-device MediaPipe face landmarks
+- **Passport-preset overlay** — boundary, center line, eye-line and safe-area guides matched to your selected country size
+- **Live quality score (0-100)** for brightness, sharpness, contrast, background uniformity, face size, centering and pose
+- **Smart Auto-Crop** centers and sizes the photo automatically from detected facial landmarks
+- **Smart Auto Capture** — a 3/5/10s countdown fires automatically once framing is correct and stable
+- 🔒 **100% on-device**: no image, video frame, or face/landmark data is ever uploaded to a server
+
 ---
 
 ## 🌍 Supported Countries
