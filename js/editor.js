@@ -108,6 +108,7 @@
     const adjustmentsCard = document.getElementById('adjustmentsCard');
     const sizeSelectionCard = document.getElementById('sizeSelectionCard');
     const backgroundCard = document.getElementById('backgroundCard');
+    const attireStudioCard = document.getElementById('attireStudioCard');
     const batchCard = document.getElementById('batchCard');
     
     const themeToggle = document.getElementById('themeToggle');
@@ -308,7 +309,9 @@
         hideCard(cropToolsCard);
         showCard(adjustmentsCard);
         showCard(backgroundCard);
+        showCard(attireStudioCard);
         showCard(batchCard);
+        notifyAttireSourceChanged();
         
         renderPreview();
     });
@@ -333,7 +336,9 @@
         hideCard(cropToolsCard);
         showCard(adjustmentsCard);
         showCard(backgroundCard);
+        showCard(attireStudioCard);
         showCard(batchCard);
+        notifyAttireSourceChanged();
         
         renderPreview();
     });
@@ -343,6 +348,7 @@
         showCard(cropToolsCard);
         hideCard(adjustmentsCard);
         hideCard(backgroundCard);
+        hideCard(attireStudioCard);
         hideCard(batchCard);
     });
 
@@ -481,6 +487,7 @@
 
         bgRemovedCanvas = result;
         bgRemovalStatus.textContent = '✅ Background removed — pick a color below.';
+        notifyAttireSourceChanged();
         renderPreview();
         if (a4Area.style.display !== 'none') updateA4WithNewSize();
     }
@@ -492,6 +499,7 @@
                 applyBackgroundRemoval();
             } else {
                 bgRemovalStatus.style.display = 'none';
+                notifyAttireSourceChanged();
                 renderPreview();
                 if (a4Area.style.display !== 'none') updateA4WithNewSize();
             }
@@ -525,8 +533,29 @@
     // Returns the canvas that should be drawn as the photo's subject: the
     // AI background-removed (transparent) canvas when enabled, or the
     // plain cropped canvas otherwise.
-    function getSourceCanvas() {
+    function getBaseCanvas() {
         return (bgRemovalEnabled && bgRemovedCanvas) ? bgRemovedCanvas : croppedCanvas;
+    }
+
+    // On top of that, the AI Attire Studio may composite a non-destructive
+    // clothing/hijab layer. If it isn't enabled (or hasn't finished its
+    // one-time, on-device face analysis yet) this simply falls back to the
+    // base canvas, so all existing upload/camera/background/export
+    // behaviour is fully preserved.
+    function getSourceCanvas() {
+        const base = getBaseCanvas();
+        if (base && window.PPGAttireStudio && window.PPGAttireStudio.isEnabled()) {
+            const attired = window.PPGAttireStudio.getOutputCanvas(base);
+            if (attired) return attired;
+        }
+        return base;
+    }
+
+    // Tell the Attire Studio the underlying photo pixels changed (new crop,
+    // background removal toggle, etc.) so it can (re)run on-device face
+    // analysis on the new source.
+    function notifyAttireSourceChanged() {
+        if (window.PPGAttireStudio) window.PPGAttireStudio.setSourceCanvas(getBaseCanvas());
     }
 
     // ------------------------------------------------------------------
@@ -1103,6 +1132,339 @@
             pdf.save('passport-photos-batch.pdf');
         });
     }
+
+    // ------------------------------------------------------------------
+    // AI Professional Attire Studio — UI wiring
+    // ------------------------------------------------------------------
+    (function initAttireStudioUI() {
+        if (!window.PPGAttireStudio || !window.PPGCountryPresets || !window.PPGAttireCatalog) return;
+
+        const Studio = window.PPGAttireStudio;
+        const Presets = window.PPGCountryPresets;
+        const Catalog = window.PPGAttireCatalog;
+
+        const enableToggle = document.getElementById('attireEnableToggle');
+        const controls = document.getElementById('attireControls');
+        const countrySelect = document.getElementById('attireCountrySelect');
+        const documentSelect = document.getElementById('attireDocumentSelect');
+        const recommendBox = document.getElementById('attireRecommend');
+        const categoryTabs = document.getElementById('attireCategoryTabs');
+        const attireGrid = document.getElementById('attireGrid');
+        const attireColorRow = document.getElementById('attireColorRow');
+        const hijabGrid = document.getElementById('hijabGrid');
+        const hijabColorRow = document.getElementById('hijabColorRow');
+        const clothingVisibleToggle = document.getElementById('clothingVisibleToggle');
+        const clothingOpacity = document.getElementById('clothingOpacity');
+        const hijabVisibleToggle = document.getElementById('hijabVisibleToggle');
+        const hijabOpacity = document.getElementById('hijabOpacity');
+        const edgeSoftness = document.getElementById('attireEdgeSoftness');
+        const scaleSlider = document.getElementById('attireScale');
+        const restoreBtn = document.getElementById('attireRestoreOriginal');
+        const runDoctorBtn = document.getElementById('attireRunDoctor');
+        const doctorScoreEl = document.getElementById('attireDoctorScore');
+        const doctorListEl = document.getElementById('attireDoctorList');
+        const doctorFixesEl = document.getElementById('attireDoctorFixes');
+
+        if (!enableToggle || !controls) return;
+
+        let activeCategory = 'all';
+        let currentAttireId = null;
+
+        // Small safe DOM-building helper — avoids innerHTML/string
+        // concatenation for anything derived from dynamic data.
+        function el(tag, attrs, children) {
+            const node = document.createElement(tag);
+            Object.entries(attrs || {}).forEach(([k, v]) => {
+                if (k === 'class') node.className = v;
+                else if (k === 'text') node.textContent = v;
+                else if (k.startsWith('data-')) node.setAttribute(k, v);
+                else if (k === 'style') node.setAttribute('style', v);
+                else node[k] = v;
+            });
+            (children || []).forEach((c) => node.appendChild(c));
+            return node;
+        }
+
+        function clear(node) {
+            while (node.firstChild) node.removeChild(node.firstChild);
+        }
+
+        Studio.init({
+            onReady: () => {
+                if (croppedCanvas) {
+                    renderPreview();
+                    if (a4Area.style.display !== 'none') updateA4WithNewSize();
+                }
+            }
+        });
+
+        function refreshPreview() {
+            if (croppedCanvas) {
+                renderPreview();
+                if (a4Area.style.display !== 'none') updateA4WithNewSize();
+            }
+        }
+
+        function populateCountries() {
+            clear(countrySelect);
+            Presets.listCountries().forEach((c) => {
+                countrySelect.appendChild(el('option', { value: c.id, text: `${c.flag} ${c.label}` }));
+            });
+        }
+
+        function populateDocuments() {
+            clear(documentSelect);
+            Presets.listDocuments(countrySelect.value).forEach((d) => {
+                documentSelect.appendChild(el('option', { value: d.id, text: d.label }));
+            });
+        }
+
+        function renderRecommendation() {
+            const rec = Studio.recommend();
+            clear(recommendBox);
+            if (!rec) { recommendBox.hidden = true; return; }
+            recommendBox.hidden = false;
+            const suggestedNames = rec.suggested.map((a) => a.label).join(', ') || '—';
+            recommendBox.appendChild(el('strong', { text: `📋 ${rec.documentLabel} guidance` }));
+            recommendBox.appendChild(document.createElement('br'));
+            recommendBox.appendChild(document.createTextNode(`Background: ${rec.background}`));
+            recommendBox.appendChild(document.createElement('br'));
+            recommendBox.appendChild(document.createTextNode(`Attire: ${rec.guidance}`));
+            recommendBox.appendChild(document.createElement('br'));
+            recommendBox.appendChild(document.createTextNode(`Suggested: ${suggestedNames}`));
+            recommendBox.appendChild(el('p', { class: 'attire-disclaimer', style: 'margin-top:6px;', text: `⚠️ ${rec.disclaimer}` }));
+        }
+
+        function renderCategoryTabs() {
+            const doc = Presets.getDocument(countrySelect.value, documentSelect.value);
+            const cats = doc ? doc.attireCategories.filter((c) => c !== 'hijab') : [];
+            const labels = { shirt: 'Shirts', blazer: 'Blazers', suit: 'Suits', jacket: 'Jackets', coat: 'Coats', tie: 'Ties' };
+            clear(categoryTabs);
+            ['all', ...cats].forEach((c) => {
+                const btn = el('button', {
+                    type: 'button',
+                    class: 'attire-tab' + (c === activeCategory ? ' active' : ''),
+                    'data-cat': c,
+                    text: c === 'all' ? 'All' : (labels[c] || c)
+                });
+                categoryTabs.appendChild(btn);
+            });
+        }
+
+        function renderAttireGrid() {
+            const items = Catalog.byCountry(countrySelect.value)
+                .filter((a) => activeCategory === 'all' || a.category === activeCategory);
+            clear(attireGrid);
+            items.forEach((a) => {
+                const swatch = el('span', { class: 'attire-swatch', style: `background:${a.defaultColor}` });
+                const btn = el('button', {
+                    type: 'button',
+                    class: 'attire-item' + (a.id === currentAttireId ? ' active' : ''),
+                    'data-id': a.id
+                }, [swatch, document.createTextNode(a.label)]);
+                attireGrid.appendChild(btn);
+            });
+            renderAttireColors(items.find((a) => a.id === currentAttireId));
+        }
+
+        function renderAttireColors(attire) {
+            clear(attireColorRow);
+            if (!attire) return;
+            attire.colors.forEach((c) => {
+                attireColorRow.appendChild(el('span', {
+                    class: 'attire-color-chip', 'data-color': c.value, style: `background:${c.value}`, title: c.name
+                }));
+            });
+            attireColorRow.appendChild(el('input', { type: 'color', id: 'attireCustomColor', title: 'Custom colour', value: attire.defaultColor }));
+        }
+
+        function renderHijabGrid() {
+            const currentHijabId = Studio.getState().hijabId;
+            clear(hijabGrid);
+            Catalog.HIJAB_STYLES.forEach((h) => {
+                const swatch = el('span', { class: 'attire-swatch', style: 'background:#6b6e75' });
+                const btn = el('button', {
+                    type: 'button',
+                    class: 'attire-item' + (h.id === currentHijabId ? ' active' : ''),
+                    'data-hid': h.id,
+                    title: h.description
+                }, [swatch, document.createTextNode(h.label)]);
+                hijabGrid.appendChild(btn);
+            });
+
+            clear(hijabColorRow);
+            Catalog.COLOR_PRESETS.hijab.forEach((c) => {
+                hijabColorRow.appendChild(el('span', {
+                    class: 'attire-color-chip', 'data-hcolor': c.value, style: `background:${c.value}`, title: c.name
+                }));
+            });
+            hijabColorRow.appendChild(el('input', { type: 'color', id: 'hijabCustomColor', title: 'Custom colour', value: Studio.getState().hijabColor }));
+        }
+
+        function renderDoctor(result) {
+            const cls = result.score >= 80 ? 'score-good' : result.score >= 50 ? 'score-warn' : 'score-bad';
+            doctorScoreEl.textContent = result.score + '/100';
+            doctorScoreEl.className = 'attire-doctor-score ' + cls;
+
+            clear(doctorListEl);
+            Object.entries(result.categories).forEach(([k, v]) => {
+                doctorListEl.appendChild(el('li', {}, [
+                    el('span', { text: k }),
+                    document.createTextNode(': '),
+                    el('strong', { text: String(v) })
+                ]));
+            });
+
+            clear(doctorFixesEl);
+            if (result.issues.length) {
+                doctorFixesEl.appendChild(document.createTextNode('⚠️ ' + result.issues.join(' ')));
+                if (result.fixes.length) {
+                    doctorFixesEl.appendChild(document.createElement('br'));
+                    doctorFixesEl.appendChild(document.createTextNode('💡 ' + result.fixes.join(' ')));
+                }
+            } else {
+                doctorFixesEl.appendChild(document.createTextNode('✅ No major issues detected.'));
+            }
+        }
+
+        enableToggle.addEventListener('change', () => {
+            Studio.setEnabled(enableToggle.checked);
+            controls.style.display = enableToggle.checked ? 'block' : 'none';
+            if (enableToggle.checked) {
+                populateCountries();
+                populateDocuments();
+                Studio.setCountry(countrySelect.value);
+                Studio.setDocument(documentSelect.value);
+                renderRecommendation();
+                renderCategoryTabs();
+                renderAttireGrid();
+                renderHijabGrid();
+            }
+            refreshPreview();
+        });
+
+        countrySelect && countrySelect.addEventListener('change', () => {
+            populateDocuments();
+            Studio.setCountry(countrySelect.value);
+            Studio.setDocument(documentSelect.value);
+            currentAttireId = null;
+            Studio.clearAttire();
+            renderRecommendation();
+            renderCategoryTabs();
+            renderAttireGrid();
+            refreshPreview();
+        });
+
+        documentSelect && documentSelect.addEventListener('change', () => {
+            Studio.setDocument(documentSelect.value);
+            renderRecommendation();
+            renderCategoryTabs();
+            refreshPreview();
+        });
+
+        categoryTabs && categoryTabs.addEventListener('click', (e) => {
+            const btn = e.target.closest('.attire-tab');
+            if (!btn) return;
+            activeCategory = btn.dataset.cat;
+            renderCategoryTabs();
+            renderAttireGrid();
+        });
+
+        attireGrid && attireGrid.addEventListener('click', (e) => {
+            const btn = e.target.closest('.attire-item');
+            if (!btn) return;
+            if (btn.dataset.id === currentAttireId) {
+                currentAttireId = null;
+                Studio.clearAttire();
+            } else {
+                currentAttireId = btn.dataset.id;
+                const attire = Catalog.findAttire(countrySelect.value, currentAttireId);
+                Studio.setAttire(currentAttireId, attire ? attire.defaultColor : null);
+            }
+            renderAttireGrid();
+            refreshPreview();
+        });
+
+        attireColorRow && attireColorRow.addEventListener('click', (e) => {
+            const chip = e.target.closest('.attire-color-chip');
+            if (!chip) return;
+            Studio.setAttireColor(chip.dataset.color);
+            refreshPreview();
+        });
+        attireColorRow && attireColorRow.addEventListener('input', (e) => {
+            if (e.target.id === 'attireCustomColor') {
+                Studio.setAttireColor(e.target.value);
+                refreshPreview();
+            }
+        });
+
+        hijabGrid && hijabGrid.addEventListener('click', (e) => {
+            const btn = e.target.closest('.attire-item');
+            if (!btn) return;
+            const state = Studio.getState();
+            if (btn.dataset.hid === state.hijabId) {
+                Studio.clearHijab();
+            } else {
+                Studio.setHijab(btn.dataset.hid);
+            }
+            renderHijabGrid();
+            refreshPreview();
+        });
+
+        hijabColorRow && hijabColorRow.addEventListener('click', (e) => {
+            const chip = e.target.closest('.attire-color-chip');
+            if (!chip) return;
+            Studio.setHijabColor(chip.dataset.hcolor);
+            refreshPreview();
+        });
+        hijabColorRow && hijabColorRow.addEventListener('input', (e) => {
+            if (e.target.id === 'hijabCustomColor') {
+                Studio.setHijabColor(e.target.value);
+                refreshPreview();
+            }
+        });
+
+        clothingVisibleToggle && clothingVisibleToggle.addEventListener('change', () => {
+            Studio.setLayer('clothing', { visible: clothingVisibleToggle.checked });
+            refreshPreview();
+        });
+        clothingOpacity && clothingOpacity.addEventListener('input', () => {
+            Studio.setLayer('clothing', { opacity: Number(clothingOpacity.value) / 100 });
+            refreshPreview();
+        });
+        hijabVisibleToggle && hijabVisibleToggle.addEventListener('change', () => {
+            Studio.setLayer('hijab', { visible: hijabVisibleToggle.checked });
+            refreshPreview();
+        });
+        hijabOpacity && hijabOpacity.addEventListener('input', () => {
+            Studio.setLayer('hijab', { opacity: Number(hijabOpacity.value) / 100 });
+            refreshPreview();
+        });
+        edgeSoftness && edgeSoftness.addEventListener('input', () => {
+            Studio.setEdgeSoftness(Number(edgeSoftness.value));
+            refreshPreview();
+        });
+        scaleSlider && scaleSlider.addEventListener('input', () => {
+            Studio.setTransform({ scale: Number(scaleSlider.value) / 100 });
+            refreshPreview();
+        });
+
+        restoreBtn && restoreBtn.addEventListener('click', () => {
+            Studio.restoreOriginal();
+            currentAttireId = null;
+            enableToggle.checked = false;
+            controls.style.display = 'none';
+            refreshPreview();
+        });
+
+        runDoctorBtn && runDoctorBtn.addEventListener('click', async () => {
+            const base = getBaseCanvas();
+            if (!base) return;
+            doctorScoreEl.textContent = '…';
+            const result = await Studio.runPhotoDoctorAsync(base);
+            renderDoctor(result);
+        });
+    })();
 
     // Register Service Worker for PWA
     if ('serviceWorker' in navigator) {
