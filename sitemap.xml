@@ -6,7 +6,7 @@
     <!-- Homepage / Simple Mode -->
     <url>
         <loc>https://rizwansoaib.github.io/passport-photo-generator/</loc>
-        <lastmod>2025-10-27</lastmod>
+        <lastmod>2026-08-21</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <xhtml:link rel="alternate" hreflang="en" href="https://rizwansoaib.github.io/passport-photo-generator/"/>
@@ -15,7 +15,7 @@
     <!-- Index HTML -->
     <url>
         <loc>https://rizwansoaib.github.io/passport-photo-generator/index.html</loc>
-        <lastmod>2025-10-27</lastmod>
+        <lastmod>2026-08-21</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
@@ -23,7 +23,7 @@
     <!-- Advanced Editor -->
     <url>
         <loc>https://rizwansoaib.github.io/passport-photo-generator/editor.html</loc>
-        <lastmod>2025-10-27</lastmod>
+        <lastmod>2026-08-21</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -31,7 +31,7 @@
     <!-- README / Documentation -->
     <url>
         <loc>https://github.com/rizwansoaib/passport-photo-generator</loc>
-        <lastmod>2025-10-27</lastmod>
+        <lastmod>2026-08-21</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>

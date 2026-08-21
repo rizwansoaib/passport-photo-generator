@@ -8,8 +8,8 @@
     <!-- Primary SEO Meta Tags -->
     <title>Free Passport Photo Generator Online - Create Passport Photos Instantly | 100% Free & Offline</title>
     <meta name="title" content="Free Passport Photo Generator Online - Create Passport Photos Instantly | 100% Free & Offline">
-    <meta name="description" content="Create professional passport photos for FREE! Works 100% offline, no sign-up required. Support for USA, India, UK, Canada, Schengen & more. Instant download PDF/JPG. Privacy-first photo editor with crop, adjust & enhance tools.">
-    <meta name="keywords" content="free passport photo, passport photo maker, passport photo generator, passport size photo, visa photo maker, id photo generator, free photo editor, offline passport photo, passport photo online free, photo size converter, passport photo app, passport photo tool, biometric photo, passport photo crop, us passport photo, indian passport photo, uk passport photo, canada passport photo, schengen visa photo">
+    <meta name="description" content="Create professional passport photos for FREE using your webcam or a photo upload! Works 100% offline, no sign-up required. Live AI camera studio with real-time face guidance, auto-capture & instant quality scoring. Support for USA, India, UK, Canada, Schengen & more. Instant download PDF/JPG.">
+    <meta name="keywords" content="free passport photo, passport photo maker, passport photo generator, live camera passport photo, webcam passport photo, AI passport photo camera, take passport photo online, passport size photo, visa photo maker, id photo generator, free photo editor, offline passport photo, passport photo online free, photo size converter, passport photo app, passport photo tool, biometric photo, passport photo crop, us passport photo, indian passport photo, uk passport photo, canada passport photo, schengen visa photo">
     <meta name="author" content="Rizwan Soaib">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="language" content="English">
@@ -90,6 +90,9 @@
         "Works Offline",
         "No Sign-up Required",
         "Privacy-First",
+        "Live AI Camera Studio with Real-Time Face Guidance",
+        "Smart Auto-Capture & AI Best-Shot Burst Mode",
+        "Instant On-Device Photo Quality Scoring",
         "Support for 50+ Countries",
         "Instant PDF/JPG Download",
         "Professional Photo Editor",
@@ -118,10 +121,48 @@
         "worstRating": "1"
       },
       "datePublished": "2025-01-01",
-      "dateModified": "2025-10-27",
+      "dateModified": "2026-08-21",
       "inLanguage": "en",
       "isAccessibleForFree": true,
-      "keywords": "passport photo, free photo generator, visa photo, id photo, biometric photo, passport photo maker"
+      "keywords": "passport photo, free photo generator, live camera passport photo, webcam photo capture, visa photo, id photo, biometric photo, passport photo maker"
+    }
+    </script>
+
+    <!-- HowTo Schema: Live Camera Capture -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to take a passport photo with the Live AI Camera Studio",
+      "description": "Use your device's webcam to capture a compliant passport photo in your browser with real-time AI guidance, no upload required.",
+      "totalTime": "PT2M",
+      "estimatedCost": {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "value": "0"
+      },
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Open the Live Camera Studio",
+          "text": "Click 'Use Live Camera Studio' on the homepage to open the on-device webcam capture tool."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Follow the real-time coaching",
+          "text": "Center your face using the on-screen guidance for framing, eye-line, lighting and stability."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Let Smart Auto Capture take the shot",
+          "text": "Hold still while the AI verifies framing, sharpness and background quality, then captures automatically — or press Capture manually."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Review and accept",
+          "text": "Check the AI Photo Doctor score and warnings, retake if needed, then accept the photo to continue editing and downloading."
+        }
+      ]
     }
     </script>
     
@@ -164,6 +205,20 @@
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "All photos are processed at 300 DPI (dots per inch) which is professional print quality, suitable for official passport and visa applications worldwide."
+        }
+      },{
+        "@type": "Question",
+        "name": "Can I take a passport photo directly with my webcam or phone camera?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! The built-in Live AI Camera Studio uses your device's front or rear camera to capture a passport photo directly in the browser. It provides real-time coaching for face position, eye-line, lighting and stability, then can auto-capture when framing is correct. All video processing happens on your device — no frame is ever uploaded."
+        }
+      },{
+        "@type": "Question",
+        "name": "Does the live camera tool check photo quality automatically?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The AI Photo Doctor scores brightness, contrast, sharpness, background uniformity and face framing in real time, giving you a 0-100 quality score and specific suggestions before you accept a shot."
         }
       }]
     }
@@ -265,7 +320,7 @@
         <div class="upload-section">
             <label for="photoUpload" class="upload-label" data-i18n="uploadLabel">Upload Photo:</label>
             <input type="file" id="photoUpload" accept="image/*" />
-            <button type="button" id="openCameraBtn" class="btn-secondary camera-btn-open" data-i18n="useCameraBtn">📷 Use Live Camera Studio</button>
+            <button type="button" id="openCameraBtn" class="btn-secondary camera-btn-open" data-i18n="useCameraBtn" aria-label="Open Live AI Camera Studio to capture your passport photo with your webcam">📷 Use Live Camera Studio</button>
             <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;" data-i18n="cameraPrivacyNote">🔒 Camera photos are processed locally — never uploaded.</p>
             
             <label for="photoSize" data-i18n="photoSizeLabel">Photo Size:</label>
@@ -295,6 +350,23 @@
                 <button id="generatePdf" style="display: none;" data-i18n="generatePdfBtn">📄 Generate PDF</button>
             </div>
         </div>
+
+        <section class="camera-feature-info" aria-labelledby="camera-feature-heading">
+            <h2 id="camera-feature-heading">📷 Live AI Camera Studio — Take Your Passport Photo In-Browser</h2>
+            <p>
+                No camera app or photographer required. Our Live AI Camera Studio uses your device's front or rear
+                webcam to guide you into perfect passport-photo framing in real time — entirely on-device, with
+                nothing ever uploaded or recorded to a server.
+            </p>
+            <ul class="camera-feature-list">
+                <li>🎯 Real-time face, eye-line and pose coaching for correctly framed shots</li>
+                <li>🤳 Works with front or rear camera on desktop, Android and iPhone</li>
+                <li>⏱️ Smart Auto Capture with a configurable 3s/5s/10s countdown</li>
+                <li>🤖 AI Best-Shot burst mode picks the sharpest, best-lit frame automatically</li>
+                <li>🩺 AI Photo Doctor scores brightness, sharpness, background and framing (0-100) instantly</li>
+                <li>🔒 100% private: video frames are analyzed locally and never leave your browser</li>
+            </ul>
+        </section>
     </div>
     
     <!-- Footer -->
