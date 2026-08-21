@@ -5,13 +5,14 @@
  * for the passport photo generator PWA.
  */
 
-const CACHE_NAME = 'passport-photo-v4';
+const CACHE_NAME = 'passport-photo-v5';
 const urlsToCache = [
   './',
   './index.html',
   './editor.html',
   './css/styles.css',
   './css/camera-studio.css',
+  './css/attire-studio.css',
   './js/app.js',
   './js/editor.js',
   './js/photoUpload.js',
@@ -21,6 +22,9 @@ const urlsToCache = [
   './js/qualityWorker.js',
   './js/faceDetect.js',
   './js/backgroundRemoval.js',
+  './js/countryPresets.js',
+  './js/attireCatalog.js',
+  './js/attireStudio.js',
   './js/i18n.js',
   './js/vendor/jszip.min.js',
   './manifest.json',

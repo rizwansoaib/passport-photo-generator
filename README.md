@@ -39,6 +39,19 @@ Best free passport photo maker for India, USA, Canada, UK, Schengen, China and 2
 - **Batch processing** — apply the same crop, background and filters to multiple photos at once, then export as ZIP or a multi-page PDF
 - **Multi-language interface** — English, Español, Français, हिन्दी, Deutsch, Português
 
+### 👔 AI Professional Attire Studio (New)
+
+- **Country & Document presets** for India, USA and International/ICAO-style documents — each with its own dimensions, framing guidance, background recommendation and available attire categories
+- **Professional attire collections** — India (formal shirts, blazers, suits, coats, ties, bow ties) and USA (shirts, blouse, blazer, suits, jackets, coats, ties, bow ties), each with multiple colour presets plus a custom colour picker
+- **Hijab & Headscarf Studio** — six styles (simple wrapped, professional front-frame, modest headscarf, rounded, formal, conservative ID-photo) in black, white, navy, gray, beige, cream and dark blue
+- **Face Safety Mask** — MediaPipe Face Landmarker geometry guarantees clothing and hijab layers can never cover the eyes, eyebrows, nose, mouth or chin
+- **Automatic shoulder/neck alignment** — attire is scaled, rotated and positioned from detected face geometry, with manual scale/position fine-tuning
+- **Non-destructive layers** (Clothing → Hijab, independent visibility/opacity/reset) with automatic lighting harmonization and edge feathering, on top of the original, unmodified photo
+- **Smart Attire Recommendation** for the selected country/document, always paired with a clear disclaimer that final requirements depend on the issuing authority
+- **Enhanced AI Photo Doctor** — 0-100 score covering face visibility, eye openness, head pose, centering, framing, lighting, background, sharpness, resolution and attire quality
+- **Instant "Reject & Restore Original"** — one click removes all AI attire and returns to your untouched photo
+- 🔒 **100% on-device**: no photo, face landmark or biometric data is ever uploaded; this is a styling *preview*, not an official government/document requirement
+
 ### 🤖 AI Live Camera Studio
 
 - **Live camera capture** with front/rear switching and resolution selection

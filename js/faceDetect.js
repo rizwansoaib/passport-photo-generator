@@ -117,5 +117,29 @@
         return { x, y, width: finalCropWidth, height: finalCropHeight };
     }
 
-    window.PPGFaceDetect = { detectAutoCropRect };
+    /**
+     * Runs the (shared, lazily-loaded) MediaPipe Face Landmarker on any
+     * image-like source (HTMLImageElement, HTMLCanvasElement, ImageBitmap)
+     * and returns the raw 468-point normalized landmark list for a single
+     * detected face, or `null` if the model/detection is unavailable.
+     * Exposed so other on-device features (e.g. the AI Attire Studio) can
+     * reuse the same model instance instead of loading MediaPipe twice.
+     */
+    async function detectLandmarks(source) {
+        await ensureFaceLandmarker();
+        if (!faceLandmarker || !source) return null;
+        try {
+            const result = faceLandmarker.detect(source);
+            const faces = (result && result.faceLandmarks) || [];
+            return faces.length >= 1 ? faces[0] : null;
+        } catch (err) {
+            return null;
+        }
+    }
+
+    function getStatus() {
+        return status;
+    }
+
+    window.PPGFaceDetect = { detectAutoCropRect, detectLandmarks, getStatus };
 })();

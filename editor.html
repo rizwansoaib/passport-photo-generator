@@ -40,6 +40,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
     <link rel="stylesheet" href="css/camera-studio.css">
+    <link rel="stylesheet" href="css/attire-studio.css">
     
     <!-- Preconnect -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -166,6 +167,80 @@
                         <button type="button" class="bg-swatch" data-color="#d32f2f" style="background:#d32f2f" title="Red"></button>
                         <button type="button" class="bg-swatch" data-color="#e0e0e0" style="background:#e0e0e0" title="Grey"></button>
                         <input type="color" id="customBgColor" value="#ffffff" title="Custom color" />
+                    </div>
+                </div>
+
+                <!-- AI Professional Attire Studio -->
+                <div class="card" id="attireStudioCard" style="display: none;">
+                    <h3 class="card-title">👔 AI Professional Attire Studio</h3>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="attireEnableToggle" />
+                        <span>Enable AI attire / hijab preview</span>
+                    </label>
+                    <p class="attire-disclaimer">🔒 100% on-device (MediaPipe + Canvas). Nothing is uploaded. This is an
+                        optional professional-photo <em>preview</em> only — always verify exact rules with the
+                        issuing authority before submitting any document photo.</p>
+
+                    <div id="attireControls" style="display: none;">
+                        <div class="attire-row">
+                            <select id="attireCountrySelect"></select>
+                            <select id="attireDocumentSelect"></select>
+                        </div>
+
+                        <div id="attireRecommend" class="attire-recommend" hidden></div>
+
+                        <div class="attire-tabs" id="attireCategoryTabs"></div>
+                        <div class="attire-grid" id="attireGrid"></div>
+                        <div class="attire-color-row" id="attireColorRow"></div>
+
+                        <h4 style="margin: 10px 0 6px; font-size: 13px;">🧕 Hijab &amp; Headscarf Studio</h4>
+                        <div class="attire-grid" id="hijabGrid"></div>
+                        <div class="attire-color-row" id="hijabColorRow"></div>
+
+                        <div class="attire-layer-panel">
+                            <div class="attire-layer-row">
+                                <span>Clothing layer</span>
+                                <div class="attire-layer-controls">
+                                    <input type="checkbox" id="clothingVisibleToggle" checked title="Visible" />
+                                    <input type="range" id="clothingOpacity" min="0" max="100" value="100" title="Opacity" />
+                                </div>
+                            </div>
+                            <div class="attire-layer-row">
+                                <span>Hijab layer</span>
+                                <div class="attire-layer-controls">
+                                    <input type="checkbox" id="hijabVisibleToggle" checked title="Visible" />
+                                    <input type="range" id="hijabOpacity" min="0" max="100" value="100" title="Opacity" />
+                                </div>
+                            </div>
+                            <div class="attire-layer-row">
+                                <span>Edge softness / feathering</span>
+                                <div class="attire-layer-controls">
+                                    <input type="range" id="attireEdgeSoftness" min="0" max="20" value="6" />
+                                </div>
+                            </div>
+                            <div class="attire-layer-row">
+                                <span>Scale</span>
+                                <div class="attire-layer-controls">
+                                    <input type="range" id="attireScale" min="70" max="130" value="100" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="attire-actions">
+                            <button type="button" id="attireRestoreOriginal" class="btn-outline">↩ Reject &amp; Restore Original</button>
+                        </div>
+
+                        <div class="attire-doctor" id="attireDoctor">
+                            <div class="attire-doctor-header">
+                                <strong>🩺 AI Photo Doctor</strong>
+                                <span class="attire-doctor-score" id="attireDoctorScore">--/100</span>
+                            </div>
+                            <ul class="attire-doctor-list" id="attireDoctorList"></ul>
+                            <div class="attire-doctor-fixes" id="attireDoctorFixes"></div>
+                            <div class="attire-actions">
+                                <button type="button" id="attireRunDoctor" class="btn-secondary">🔍 Analyze Photo Quality</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -423,6 +498,9 @@
     <script src="js/i18n.js"></script>
     <script src="js/faceDetect.js"></script>
     <script src="js/backgroundRemoval.js"></script>
+    <script src="js/countryPresets.js"></script>
+    <script src="js/attireCatalog.js"></script>
+    <script src="js/attireStudio.js"></script>
     <script src="js/cameraStudio.js"></script>
     <script src="js/editor.js"></script>
 </body>

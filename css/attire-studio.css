@@ -1,0 +1,198 @@
+/**
+ * AI PROFESSIONAL ATTIRE STUDIO — panel styles
+ * Uses the same CSS custom properties as css/styles.css so it inherits
+ * light/dark theme automatically.
+ */
+
+.attire-disclaimer {
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: var(--text-secondary);
+    background: var(--card-bg-secondary);
+    border-left: 3px solid var(--accent-color);
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin: 8px 0 12px;
+}
+
+.attire-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.attire-row select {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    background: var(--input-bg);
+    color: var(--text-primary);
+    font-size: 13px;
+}
+
+.attire-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 8px 0;
+}
+
+.attire-tab {
+    padding: 6px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.attire-tab.active {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
+.attire-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.attire-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 12.5px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.attire-item.active {
+    border-color: var(--accent-color);
+    background: var(--card-bg-secondary);
+}
+
+.attire-swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.2);
+    flex-shrink: 0;
+}
+
+.attire-color-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.attire-color-chip {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.attire-color-chip.active {
+    border-color: var(--accent-color);
+}
+
+.attire-layer-panel {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.attire-layer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 12.5px;
+}
+
+.attire-layer-row:last-child { margin-bottom: 0; }
+
+.attire-layer-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.attire-layer-controls input[type="range"] {
+    width: 80px;
+}
+
+.attire-recommend {
+    background: var(--card-bg-secondary);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 12.5px;
+    margin-bottom: 10px;
+}
+
+.attire-recommend strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.attire-doctor {
+    margin-top: 10px;
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.attire-doctor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.attire-doctor-score {
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.attire-doctor-score.score-good { background: #d4f4dd; color: #1e7e34; }
+.attire-doctor-score.score-warn { background: #fff3cd; color: #8a6500; }
+.attire-doctor-score.score-bad { background: #f8d7da; color: #a02330; }
+
+.attire-doctor-list {
+    list-style: none;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0 0 6px;
+    padding: 0;
+}
+
+.attire-doctor-fixes {
+    font-size: 12px;
+    color: var(--text-primary);
+}
+
+.attire-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .attire-color-chip { border-color: rgba(255,255,255,0.15); }
+}
