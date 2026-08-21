@@ -5,7 +5,7 @@
  * for the passport photo generator PWA.
  */
 
-const CACHE_NAME = 'passport-photo-v3';
+const CACHE_NAME = 'passport-photo-v4';
 const urlsToCache = [
   './',
   './index.html',
@@ -18,6 +18,11 @@ const urlsToCache = [
   './js/canvasRenderer.js',
   './js/pdfGenerator.js',
   './js/cameraStudio.js',
+  './js/qualityWorker.js',
+  './js/faceDetect.js',
+  './js/backgroundRemoval.js',
+  './js/i18n.js',
+  './js/vendor/jszip.min.js',
   './manifest.json',
   // CDN resources will be cached on first load
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',

@@ -173,6 +173,97 @@ body.camera-studio-active {
     content: "⚠️ ";
 }
 
+.camera-stability {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(20, 20, 20, 0.75);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: #ddd;
+}
+
+.camera-stability-track {
+    width: 90px;
+    height: 6px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.camera-stability-fill {
+    height: 100%;
+    width: 100%;
+    background: #4cd964;
+    transition: width 0.2s ease, background 0.2s ease;
+}
+
+.camera-photo-doctor {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-top: 12px;
+}
+
+.camera-photo-doctor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    font-size: 14px;
+}
+
+.camera-photo-doctor-score {
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.camera-photo-doctor-score.score-good { color: #4cd964; }
+.camera-photo-doctor-score.score-warn { color: #ffd60a; }
+.camera-photo-doctor-score.score-bad { color: #ff453a; }
+
+.camera-photo-doctor-list {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 6px 12px;
+    font-size: 12px;
+}
+
+.camera-photo-doctor-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    color: #ddd;
+    padding: 2px 0;
+}
+
+.camera-photo-doctor-list li strong { min-width: 28px; text-align: right; }
+.camera-photo-doctor-list li.doctor-good strong { color: #4cd964; }
+.camera-photo-doctor-list li.doctor-warn strong { color: #ffd60a; }
+.camera-photo-doctor-list li.doctor-bad strong { color: #ff453a; }
+.camera-photo-doctor-list li.doctor-info strong { color: #8ecfff; }
+
+.camera-photo-doctor-fixes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.camera-fix-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+}
+
 .camera-controls {
     background: rgba(10, 10, 10, 0.92);
     padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
@@ -247,5 +338,15 @@ body.camera-studio-active {
     }
     .camera-countdown {
         font-size: 64px;
+    }
+    .camera-stability {
+        top: 8px;
+        padding: 5px 10px;
+    }
+    .camera-stability-track {
+        width: 64px;
+    }
+    .camera-photo-doctor-list {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     }
 }
