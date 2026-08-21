@@ -1170,6 +1170,25 @@
         let activeCategory = 'all';
         let currentAttireId = null;
 
+        // Small safe DOM-building helper — avoids innerHTML/string
+        // concatenation for anything derived from dynamic data.
+        function el(tag, attrs, children) {
+            const node = document.createElement(tag);
+            Object.entries(attrs || {}).forEach(([k, v]) => {
+                if (k === 'class') node.className = v;
+                else if (k === 'text') node.textContent = v;
+                else if (k.startsWith('data-')) node.setAttribute(k, v);
+                else if (k === 'style') node.setAttribute('style', v);
+                else node[k] = v;
+            });
+            (children || []).forEach((c) => node.appendChild(c));
+            return node;
+        }
+
+        function clear(node) {
+            while (node.firstChild) node.removeChild(node.firstChild);
+        }
+
         Studio.init({
             onReady: () => {
                 if (croppedCanvas) {
@@ -1187,77 +1206,125 @@
         }
 
         function populateCountries() {
-            countrySelect.innerHTML = Presets.listCountries()
-                .map((c) => `<option value="${c.id}">${c.flag} ${c.label}</option>`).join('');
+            clear(countrySelect);
+            Presets.listCountries().forEach((c) => {
+                countrySelect.appendChild(el('option', { value: c.id, text: `${c.flag} ${c.label}` }));
+            });
         }
 
         function populateDocuments() {
-            const docs = Presets.listDocuments(countrySelect.value);
-            documentSelect.innerHTML = docs.map((d) => `<option value="${d.id}">${d.label}</option>`).join('');
+            clear(documentSelect);
+            Presets.listDocuments(countrySelect.value).forEach((d) => {
+                documentSelect.appendChild(el('option', { value: d.id, text: d.label }));
+            });
         }
 
         function renderRecommendation() {
             const rec = Studio.recommend();
+            clear(recommendBox);
             if (!rec) { recommendBox.hidden = true; return; }
             recommendBox.hidden = false;
             const suggestedNames = rec.suggested.map((a) => a.label).join(', ') || '—';
-            recommendBox.innerHTML = `
-                <strong>📋 ${rec.documentLabel} guidance</strong>
-                Background: ${rec.background}<br>
-                Attire: ${rec.guidance}<br>
-                Suggested: ${suggestedNames}
-                <p class="attire-disclaimer" style="margin-top:6px;">⚠️ ${rec.disclaimer}</p>
-            `;
+            recommendBox.appendChild(el('strong', { text: `📋 ${rec.documentLabel} guidance` }));
+            recommendBox.appendChild(document.createElement('br'));
+            recommendBox.appendChild(document.createTextNode(`Background: ${rec.background}`));
+            recommendBox.appendChild(document.createElement('br'));
+            recommendBox.appendChild(document.createTextNode(`Attire: ${rec.guidance}`));
+            recommendBox.appendChild(document.createElement('br'));
+            recommendBox.appendChild(document.createTextNode(`Suggested: ${suggestedNames}`));
+            recommendBox.appendChild(el('p', { class: 'attire-disclaimer', style: 'margin-top:6px;', text: `⚠️ ${rec.disclaimer}` }));
         }
 
         function renderCategoryTabs() {
             const doc = Presets.getDocument(countrySelect.value, documentSelect.value);
             const cats = doc ? doc.attireCategories.filter((c) => c !== 'hijab') : [];
             const labels = { shirt: 'Shirts', blazer: 'Blazers', suit: 'Suits', jacket: 'Jackets', coat: 'Coats', tie: 'Ties' };
-            categoryTabs.innerHTML = ['all', ...cats]
-                .map((c) => `<button type="button" class="attire-tab${c === activeCategory ? ' active' : ''}" data-cat="${c}">${c === 'all' ? 'All' : (labels[c] || c)}</button>`)
-                .join('');
+            clear(categoryTabs);
+            ['all', ...cats].forEach((c) => {
+                const btn = el('button', {
+                    type: 'button',
+                    class: 'attire-tab' + (c === activeCategory ? ' active' : ''),
+                    'data-cat': c,
+                    text: c === 'all' ? 'All' : (labels[c] || c)
+                });
+                categoryTabs.appendChild(btn);
+            });
         }
 
         function renderAttireGrid() {
             const items = Catalog.byCountry(countrySelect.value)
                 .filter((a) => activeCategory === 'all' || a.category === activeCategory);
-            attireGrid.innerHTML = items.map((a) => `
-                <button type="button" class="attire-item${a.id === currentAttireId ? ' active' : ''}" data-id="${a.id}">
-                    <span class="attire-swatch" style="background:${a.defaultColor}"></span>${a.label}
-                </button>
-            `).join('');
+            clear(attireGrid);
+            items.forEach((a) => {
+                const swatch = el('span', { class: 'attire-swatch', style: `background:${a.defaultColor}` });
+                const btn = el('button', {
+                    type: 'button',
+                    class: 'attire-item' + (a.id === currentAttireId ? ' active' : ''),
+                    'data-id': a.id
+                }, [swatch, document.createTextNode(a.label)]);
+                attireGrid.appendChild(btn);
+            });
             renderAttireColors(items.find((a) => a.id === currentAttireId));
         }
 
         function renderAttireColors(attire) {
-            if (!attire) { attireColorRow.innerHTML = ''; return; }
-            attireColorRow.innerHTML = attire.colors.map((c) => `
-                <span class="attire-color-chip" data-color="${c.value}" style="background:${c.value}" title="${c.name}"></span>
-            `).join('') + `<input type="color" id="attireCustomColor" title="Custom colour" value="${attire.defaultColor}" />`;
+            clear(attireColorRow);
+            if (!attire) return;
+            attire.colors.forEach((c) => {
+                attireColorRow.appendChild(el('span', {
+                    class: 'attire-color-chip', 'data-color': c.value, style: `background:${c.value}`, title: c.name
+                }));
+            });
+            attireColorRow.appendChild(el('input', { type: 'color', id: 'attireCustomColor', title: 'Custom colour', value: attire.defaultColor }));
         }
 
         function renderHijabGrid() {
             const currentHijabId = Studio.getState().hijabId;
-            hijabGrid.innerHTML = Catalog.HIJAB_STYLES.map((h) => `
-                <button type="button" class="attire-item${h.id === currentHijabId ? ' active' : ''}" data-hid="${h.id}" title="${h.description}">
-                    <span class="attire-swatch" style="background:#6b6e75"></span>${h.label}
-                </button>
-            `).join('');
-            hijabColorRow.innerHTML = Catalog.COLOR_PRESETS.hijab.map((c) => `
-                <span class="attire-color-chip" data-hcolor="${c.value}" style="background:${c.value}" title="${c.name}"></span>
-            `).join('') + `<input type="color" id="hijabCustomColor" title="Custom colour" value="${Studio.getState().hijabColor}" />`;
+            clear(hijabGrid);
+            Catalog.HIJAB_STYLES.forEach((h) => {
+                const swatch = el('span', { class: 'attire-swatch', style: 'background:#6b6e75' });
+                const btn = el('button', {
+                    type: 'button',
+                    class: 'attire-item' + (h.id === currentHijabId ? ' active' : ''),
+                    'data-hid': h.id,
+                    title: h.description
+                }, [swatch, document.createTextNode(h.label)]);
+                hijabGrid.appendChild(btn);
+            });
+
+            clear(hijabColorRow);
+            Catalog.COLOR_PRESETS.hijab.forEach((c) => {
+                hijabColorRow.appendChild(el('span', {
+                    class: 'attire-color-chip', 'data-hcolor': c.value, style: `background:${c.value}`, title: c.name
+                }));
+            });
+            hijabColorRow.appendChild(el('input', { type: 'color', id: 'hijabCustomColor', title: 'Custom colour', value: Studio.getState().hijabColor }));
         }
 
         function renderDoctor(result) {
             const cls = result.score >= 80 ? 'score-good' : result.score >= 50 ? 'score-warn' : 'score-bad';
             doctorScoreEl.textContent = result.score + '/100';
             doctorScoreEl.className = 'attire-doctor-score ' + cls;
-            doctorListEl.innerHTML = Object.entries(result.categories)
-                .map(([k, v]) => `<li><span>${k}</span>: <strong>${v}</strong></li>`).join('');
-            doctorFixesEl.innerHTML = result.issues.length
-                ? '⚠️ ' + result.issues.join(' ') + (result.fixes.length ? '<br>💡 ' + result.fixes.join(' ') : '')
-                : '✅ No major issues detected.';
+
+            clear(doctorListEl);
+            Object.entries(result.categories).forEach(([k, v]) => {
+                doctorListEl.appendChild(el('li', {}, [
+                    el('span', { text: k }),
+                    document.createTextNode(': '),
+                    el('strong', { text: String(v) })
+                ]));
+            });
+
+            clear(doctorFixesEl);
+            if (result.issues.length) {
+                doctorFixesEl.appendChild(document.createTextNode('⚠️ ' + result.issues.join(' ')));
+                if (result.fixes.length) {
+                    doctorFixesEl.appendChild(document.createElement('br'));
+                    doctorFixesEl.appendChild(document.createTextNode('💡 ' + result.fixes.join(' ')));
+                }
+            } else {
+                doctorFixesEl.appendChild(document.createTextNode('✅ No major issues detected.'));
+            }
         }
 
         enableToggle.addEventListener('change', () => {
