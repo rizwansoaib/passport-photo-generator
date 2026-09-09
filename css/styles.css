@@ -124,6 +124,102 @@ h1 {
     margin: 0 auto;
 }
 
+.dopamine-hook {
+    margin: 14px auto 0;
+    max-width: 700px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #d97706;
+    animation: pulse 2.4s ease-in-out infinite;
+}
+
+body.dark-mode .dopamine-hook {
+    color: #fbbf24;
+}
+
+/* ------------------------------------------------------------------ */
+/* Trust / social-proof stats bar                                      */
+/* ------------------------------------------------------------------ */
+.stats-bar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 20px 0 30px;
+    padding: 18px 10px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.06) 0%, rgba(118, 75, 162, 0.06) 100%);
+    border-radius: 16px;
+    border: 2px solid rgba(102, 126, 234, 0.12);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 130px;
+    padding: 6px 12px;
+}
+
+.stat-number {
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    text-align: center;
+}
+
+/* ------------------------------------------------------------------ */
+/* Success celebration toast                                           */
+/* ------------------------------------------------------------------ */
+.success-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translate(-50%, 40px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 3000;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    max-width: 90vw;
+}
+
+.success-toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.success-toast-icon {
+    font-size: 20px;
+}
+
+@media (max-width: 768px) {
+    .stats-bar {
+        gap: 10px;
+    }
+    .stat-item {
+        min-width: 45%;
+    }
+}
+
 body.dark-mode .app-header {
     background: linear-gradient(135deg, rgba(124, 138, 219, 0.1) 0%, rgba(142, 107, 176, 0.1) 100%);
     border-color: rgba(124, 138, 219, 0.25);
