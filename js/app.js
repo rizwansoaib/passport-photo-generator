@@ -103,6 +103,53 @@
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
 
+    // ------------------------------------------------------------------
+    // Trust stats bar: animated count-up for social-proof numbers, plus a
+    // real personal counter (stored locally) of photos this visitor made —
+    // small dopamine hooks that reward the user for using the tool.
+    // ------------------------------------------------------------------
+    function animateCountUp(el, target, duration) {
+        if (!el) return;
+        const start = 0;
+        const startTime = performance.now();
+        function tick(now) {
+            const progress = Math.min((now - startTime) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(start + (target - start) * eased).toLocaleString();
+            if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+    }
+
+    document.querySelectorAll('.stat-number[data-target]').forEach((el) => {
+        const target = parseInt(el.dataset.target, 10) || 0;
+        animateCountUp(el, target, 1600);
+    });
+
+    const statYourPhotosEl = document.getElementById('statYourPhotos');
+    function getPhotosMadeCount() {
+        return parseInt(localStorage.getItem('ppgPhotosMade') || '0', 10);
+    }
+    function incrementPhotosMadeCount() {
+        const next = getPhotosMadeCount() + 1;
+        localStorage.setItem('ppgPhotosMade', String(next));
+        return next;
+    }
+    if (statYourPhotosEl) {
+        statYourPhotosEl.textContent = getPhotosMadeCount().toLocaleString();
+    }
+
+    // Success celebration toast shown after a rewarding action (PDF ready).
+    const successToast = document.getElementById('successToast');
+    function showSuccessToast() {
+        if (!successToast) return;
+        successToast.classList.add('show');
+        clearTimeout(showSuccessToast._t);
+        showSuccessToast._t = setTimeout(() => {
+            successToast.classList.remove('show');
+        }, 3200);
+    }
+
     // Event listeners
     photoUpload.addEventListener('change', handleImageUpload);
     generateBtn.addEventListener('click', generatePDF);
@@ -414,6 +461,11 @@
         // Save PDF
         const timestamp = new Date().toISOString().slice(0, 10);
         pdf.save(`passport-photos-${timestamp}.pdf`);
+
+        // Dopamine reward: celebrate the win and update the personal counter.
+        const newCount = incrementPhotosMadeCount();
+        if (statYourPhotosEl) statYourPhotosEl.textContent = newCount.toLocaleString();
+        showSuccessToast();
     }
 
     // Initial state

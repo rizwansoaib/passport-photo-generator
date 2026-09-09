@@ -82,6 +82,19 @@
     let bgRemovedCanvas = null;
     let filterPreset = 'none';
     let vignetteEnabled = false;
+    let suitStyle = 'none';
+
+    // Virtual Suit Changer: clean, template-based formal attire overlays
+    // drawn directly on the canvas (shoulders down), so casual clothes are
+    // covered by a professional suit/blazer silhouette for passport & visa
+    // photos — no external images or body-segmentation model required.
+    const SUIT_STYLES = {
+        blackSuit: { suit: '#1a1a1a', lapel: '#0d0d0d', shirt: '#f5f5f5', tie: '#7a0000', hasTie: true, hasLapel: true },
+        navySuit: { suit: '#1c2b4a', lapel: '#122036', shirt: '#f5f5f5', tie: '#8a1c1c', hasTie: true, hasLapel: true },
+        greyBlazer: { suit: '#5b5f66', lapel: '#454851', shirt: '#f5f5f5', tie: '#2b3a55', hasTie: true, hasLapel: true },
+        maroonBlazer: { suit: '#5e2129', lapel: '#4a1a20', shirt: '#efe6d8', tie: null, hasTie: false, hasLapel: true },
+        blouse: { suit: '#e7e2da', lapel: '#d8d0c0', shirt: '#ffffff', tie: null, hasTie: false, hasLapel: false }
+    };
 
     const FILTER_PRESETS = {
         none: '',
@@ -108,6 +121,7 @@
     const adjustmentsCard = document.getElementById('adjustmentsCard');
     const sizeSelectionCard = document.getElementById('sizeSelectionCard');
     const backgroundCard = document.getElementById('backgroundCard');
+    const suitCard = document.getElementById('suitCard');
     const batchCard = document.getElementById('batchCard');
     
     const themeToggle = document.getElementById('themeToggle');
@@ -308,6 +322,7 @@
         hideCard(cropToolsCard);
         showCard(adjustmentsCard);
         showCard(backgroundCard);
+        showCard(suitCard);
         showCard(batchCard);
         
         renderPreview();
@@ -333,6 +348,7 @@
         hideCard(cropToolsCard);
         showCard(adjustmentsCard);
         showCard(backgroundCard);
+        showCard(suitCard);
         showCard(batchCard);
         
         renderPreview();
@@ -343,6 +359,7 @@
         showCard(cropToolsCard);
         hideCard(adjustmentsCard);
         hideCard(backgroundCard);
+        hideCard(suitCard);
         hideCard(batchCard);
     });
 
@@ -559,6 +576,21 @@
         });
     }
 
+    // ------------------------------------------------------------------
+    // Virtual Suit Changer
+    // ------------------------------------------------------------------
+    document.querySelectorAll('.suit-option').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            suitStyle = btn.dataset.suit;
+            document.querySelectorAll('.suit-option').forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (croppedCanvas) {
+                renderPreview();
+                if (a4Area.style.display !== 'none') updateA4WithNewSize();
+            }
+        });
+    });
+
     function buildFilterString() {
         return `
             ${FILTER_PRESETS[filterPreset] || ''}
@@ -567,6 +599,74 @@
             saturate(${adjustments.saturation}%)
             blur(${adjustments.blur}px)
         `;
+    }
+
+    // Draws a formal suit/blazer template over the shoulders-down area of
+    // the photo, giving the appearance of professional attire regardless
+    // of what the subject is actually wearing.
+    function drawSuitOverlay(ctx, width, height, style) {
+        if (style === 'none' || !SUIT_STYLES[style]) return;
+        const cfg = SUIT_STYLES[style];
+        const shoulderY = height * 0.66;
+
+        ctx.save();
+
+        // Shoulders / chest silhouette
+        ctx.beginPath();
+        ctx.moveTo(-width * 0.05, height + 5);
+        ctx.lineTo(-width * 0.05, shoulderY + height * 0.05);
+        ctx.quadraticCurveTo(width * 0.5, shoulderY - height * 0.06, width * 1.05, shoulderY + height * 0.05);
+        ctx.lineTo(width * 1.05, height + 5);
+        ctx.closePath();
+        ctx.fillStyle = cfg.suit;
+        ctx.fill();
+
+        // Shirt / blouse triangle at the neckline
+        const neckHalf = width * 0.11;
+        ctx.beginPath();
+        ctx.moveTo(width * 0.5 - neckHalf, shoulderY + height * 0.015);
+        ctx.lineTo(width * 0.5, shoulderY - height * 0.03);
+        ctx.lineTo(width * 0.5 + neckHalf, shoulderY + height * 0.015);
+        ctx.lineTo(width * 0.5, height * 0.92);
+        ctx.closePath();
+        ctx.fillStyle = cfg.shirt;
+        ctx.fill();
+
+        // Lapels
+        if (cfg.hasLapel) {
+            ctx.beginPath();
+            ctx.moveTo(width * 0.5 - neckHalf, shoulderY + height * 0.015);
+            ctx.lineTo(width * 0.5 - width * 0.02, shoulderY + height * 0.02);
+            ctx.lineTo(width * 0.5 - width * 0.16, height * 0.9);
+            ctx.lineTo(width * 0.5 - width * 0.05, height * 0.55);
+            ctx.closePath();
+            ctx.fillStyle = cfg.lapel;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(width * 0.5 + neckHalf, shoulderY + height * 0.015);
+            ctx.lineTo(width * 0.5 + width * 0.02, shoulderY + height * 0.02);
+            ctx.lineTo(width * 0.5 + width * 0.16, height * 0.9);
+            ctx.lineTo(width * 0.5 + width * 0.05, height * 0.55);
+            ctx.closePath();
+            ctx.fillStyle = cfg.lapel;
+            ctx.fill();
+        }
+
+        // Tie
+        if (cfg.hasTie && cfg.tie) {
+            ctx.beginPath();
+            ctx.moveTo(width * 0.5 - width * 0.028, shoulderY + height * 0.035);
+            ctx.lineTo(width * 0.5 + width * 0.028, shoulderY + height * 0.035);
+            ctx.lineTo(width * 0.5 + width * 0.014, height * 0.86);
+            ctx.lineTo(width * 0.5, height * 0.9);
+            ctx.lineTo(width * 0.5 - width * 0.014, height * 0.86);
+            ctx.closePath();
+            ctx.fillStyle = cfg.tie;
+            ctx.fill();
+        }
+
+        ctx.restore();
     }
 
     function drawVignette(ctx, width, height) {
@@ -612,6 +712,7 @@
         }
 
         drawVignette(ctx, PHOTO_WIDTH, PHOTO_HEIGHT);
+        drawSuitOverlay(ctx, PHOTO_WIDTH, PHOTO_HEIGHT, suitStyle);
 
         refreshCompareIfVisible();
     }
@@ -853,6 +954,7 @@
         }
 
         drawVignette(tempCtx, PHOTO_WIDTH, PHOTO_HEIGHT);
+        drawSuitOverlay(tempCtx, PHOTO_WIDTH, PHOTO_HEIGHT, suitStyle);
         
         // Update preview canvas
         previewCanvas.width = PHOTO_WIDTH;
@@ -1005,6 +1107,7 @@
         }
 
         drawVignette(outCtx, PHOTO_WIDTH, PHOTO_HEIGHT);
+        drawSuitOverlay(outCtx, PHOTO_WIDTH, PHOTO_HEIGHT, suitStyle);
 
         return out;
     }
