@@ -122,8 +122,8 @@
      * image-like source (HTMLImageElement, HTMLCanvasElement, ImageBitmap)
      * and returns the raw 468-point normalized landmark list for a single
      * detected face, or `null` if the model/detection is unavailable.
-     * Exposed so other on-device features (e.g. the AI Attire Studio) can
-     * reuse the same model instance instead of loading MediaPipe twice.
+     * Exposed so other on-device features can reuse the same model
+     * instance instead of loading MediaPipe twice.
      */
     async function detectLandmarks(source) {
         await ensureFaceLandmarker();
