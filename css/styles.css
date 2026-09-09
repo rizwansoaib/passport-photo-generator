@@ -1688,6 +1688,53 @@ body.dark-mode .footer-link:hover {
 }
 
 /* ------------------------------------------------------------------ */
+/* Virtual Suit Changer                                                 */
+/* ------------------------------------------------------------------ */
+.suit-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.suit-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--card-bg);
+    border: 2px solid var(--border-color, #ddd);
+    color: var(--text-primary);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.suit-option:hover,
+.suit-option.active {
+    border-color: var(--accent-color);
+    background: rgba(102, 126, 234, 0.12);
+}
+
+.suit-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.suit-swatch-none {
+    background: transparent;
+    font-size: 12px;
+}
+
+/* ------------------------------------------------------------------ */
 /* Filter presets                                                       */
 /* ------------------------------------------------------------------ */
 .filter-presets {
